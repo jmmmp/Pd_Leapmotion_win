@@ -1,9 +1,9 @@
 
 A pure data external object for Leapmotion v.2
 
-Commissioned by Joao Pais
-Developed by Dr. Chikashi Miyama
-Thanks to: Dan Wilcox and Jakab Valtar
+- Commissioned by Joao Pais
+- Developed by Dr. Chikashi Miyama
+- Thanks to: Dan Wilcox and Jakab Valtar
 
 ## How to compile
 
