@@ -16,5 +16,5 @@ The build was tested with
 ### clone the repo
 
 ```
-git clone
+git clone https://github.com/chikashimiyama/Pd_Leapmotion_win.git
 ```
