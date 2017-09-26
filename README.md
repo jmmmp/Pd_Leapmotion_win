@@ -12,13 +12,13 @@ A pure data external object for Leapmotion v.2
 - pthread
 - pure-data
 
-
+Flext enables a C++-based Pd-external development and it must be built first.
 
 ### clone the repo
 
 clone the repo and submodules
 ```
-> git clone --recursive git://github.com/foo/bar.git
+git clone --recursive git://github.com/foo/bar.git
 ```
 
 open command line by Start -> Run -> cmd and find folder that contains **vcvars32.bat** and run. This is necessary to run msvc( micro soft visual C++ compiler).
@@ -32,15 +32,48 @@ build pd msvc
 ```
 this generates error but it's normal.
 open Open C:\flext\buildsys\config-win-pd-msvc.txt
-and edit the corresponding lines
+
+First of all add following line and define the path to cloned repo. The path of windows is tricky. You must avoid spaces and special characters.
 
 ```
 ROOTPATH="C:\*to\your\cloned\repo\"
+```
+and edit the corresponding lines
+
+```
 PDPATH=${ROOTPATH}\pure-data"
 PTHREADSVERSION=2
 PTHREADSINC="${ROOTPATH}\pthread\include"
 PTHREADSLIB="${ROOTPATH}\pthread\lib\x86"
 ```
+
+add following lines at the bottom of the file
+```
+INCPATH=$(INCPATH) /I"${ROOTPATH}\LeapSDK\include"
+LIBPATH=$(LIBPATH) /LIBPATH:"${ROOTPATH}\pthread\lib\x86"
+LIBS=$(LIBS) Leap.lib
+```
+save file and execute
+
+```
+build pd msvc
+```
+ignore the errors and issue the command again.
+
+```
+build pd msvc
+```
+
+once flext is build,  change the directory to src folder
+```
+cd src
+..\flext\build pd msvc
+..\flext\build pd msvc install
+```
+
+if the compiling is successful, you can find the leapmotion.dll under pure-data/extras
+
+When you use the leamotion.dll, Leap.dll must be placed in the same directory.
 
 ## Testing environment
 The build was tested with
