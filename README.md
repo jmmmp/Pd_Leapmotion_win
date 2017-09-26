@@ -6,18 +6,16 @@ A pure data external object for Leapmotion v.2
 - Developed by Dr. Chikashi Miyama
 - Thanks to: Dan Wilcox and Jakab Valtar
 
-## dependencies
+## prerequisite
+- Visual Studio 2015
 - [Leap SDK](https://developer.leapmotion.com/documentation/v2/cpp/index.html)
 - [flext](https://github.com/grrrr/flext) by Thomas Grill
 - pthread
-- pure-data
+- [pure data for windows](http://puredata.info/downloads/pure-data)
 
 Flext enables a C++-based Pd-external development and it must be built first.
 
-## prerequisite
-
-- Visual Studio 2015
-- [pure data for windows](http://puredata.info/downloads/pure-data)
+pure data for windows should be .zip version, extract it and place it under your home directory.
 
 ### clone the repo
 
@@ -40,12 +38,12 @@ open Open flext\buildsys\config-win-pd-msvc.txt
 
 First of all add following line and define the path to cloned repo.
 ```
+PDPATH=*C:\to\your\downloaded\pd*
 ROOTPATH=*C:\to\your\cloned\repo*
 ```
 and edit the corresponding lines
 
 ```
-PDPATH=*C:\to\your\pd\directory*
 PTHREADSVERSION=2
 PTHREADSINC=$(ROOTPATH)\pthread\include
 PTHREADSLIB=$(ROOTPATH)\pthread\lib\x86
@@ -68,6 +66,7 @@ ignore the errors and issue the command again.
 
 ```
 build pd msvc
+build pd msvc install
 ```
 
 once flext is build,  change the directory to src folder
