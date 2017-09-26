@@ -14,6 +14,11 @@ A pure data external object for Leapmotion v.2
 
 Flext enables a C++-based Pd-external development and it must be built first.
 
+## prerequisite
+
+- Visual Studio 2015
+- [pure data for windows](http://puredata.info/downloads/pure-data)
+
 ### clone the repo
 
 clone the repo and submodules
@@ -25,36 +30,37 @@ open command line by Start -> Run -> cmd and find folder that contains **vcvars3
 
 vcvars32.bat can be found C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin
 
-in vcvars32.bat
+back to the cloned repo.
 ```
-cd C:\flext
+cd flext
 build pd msvc
 ```
 this generates error but it's normal.
-open Open C:\flext\buildsys\config-win-pd-msvc.txt
+open Open flext\buildsys\config-win-pd-msvc.txt
 
-First of all add following line and define the path to cloned repo. The path of windows is tricky. You must avoid spaces and special characters.
-
+First of all add following line and define the path to cloned repo.
 ```
-ROOTPATH="C:\*to\your\cloned\repo\"
+ROOTPATH=*C:\to\your\cloned\repo*
 ```
 and edit the corresponding lines
 
 ```
-PDPATH=${ROOTPATH}\pure-data"
+PDPATH=*C:\to\your\pd\directory*
 PTHREADSVERSION=2
-PTHREADSINC="${ROOTPATH}\pthread\include"
-PTHREADSLIB="${ROOTPATH}\pthread\lib\x86"
+PTHREADSINC=$(ROOTPATH)\pthread\include
+PTHREADSLIB=$(ROOTPATH)\pthread\lib\x86
 ```
 
 add following lines at the bottom of the file
 ```
-INCPATH=$(INCPATH) /I"${ROOTPATH}\LeapSDK\include"
-LIBPATH=$(LIBPATH) /LIBPATH:"${ROOTPATH}\pthread\lib\x86"
+INCPATH=$(INCPATH) /I"$(ROOTPATH)\LeapSDK\include"
+LIBPATH=$(LIBPATH) /LIBPATH:"$(ROOTPATH)\LeapSDK\lib\x86"
 LIBS=$(LIBS) Leap.lib
 ```
-save file and execute
+save file and execute.
+Note:The path of windows is tricky. You must avoid spaces and special characters.
 
+go back to the flext directory and execute
 ```
 build pd msvc
 ```
