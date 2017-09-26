@@ -1,6 +1,4 @@
 [submodule "flext"]
 	path = flext
 	url = https://github.com/grrrr/flext.git
-[submodule "pure-data"]
-	path = pure-data
-	url = https://github.com/pure-data/pure-data.git
+
