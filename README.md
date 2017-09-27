@@ -6,7 +6,14 @@ A pure data external object for Leapmotion v.2
 - Developed by Dr. Chikashi Miyama
 - Thanks to: Dan Wilcox and Jakab Valtar
 
-## prerequisite
+## how to use
+You will find in bin directory leapmotion.dll
+place it in the same directory of you patch and open your patch.
+
+You will also need leap.dll from Leap. download leap SDK and place it in the same directory.
+
+## how to build
+### prerequisite
 - Visual Studio 2015
 - [Leap SDK](https://developer.leapmotion.com/documentation/v2/cpp/index.html)
 - [flext](https://github.com/grrrr/flext) by Thomas Grill
@@ -16,13 +23,11 @@ A pure data external object for Leapmotion v.2
 Flext enables a C++-based Pd-external development and it must be built first.
 
 pure data for windows should be .zip version, extract it and place it under your home directory.
-
-### clone the repo
-
 clone the repo and submodules
 ```
 git clone --recursive git://github.com/foo/bar.git
 ```
+download LeapSDK and place it in the root directory of the repo.
 
 open command line by Start -> Run -> cmd and find folder that contains **vcvars32.bat** and run. This is necessary to run msvc( micro soft visual C++ compiler).
 
