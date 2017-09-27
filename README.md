@@ -1,16 +1,19 @@
 
-## leapmotion object
+## Leapmotion object
 A pure data external object for Leapmotion v.2
 
-- Commissioned by Joao Pais
-- Developed by Dr. Chikashi Miyama
-- Thanks to: Dan Wilcox and Jakab Valtar
+- Commissioned by [Joao Pais](https://www.facebook.com/jmmmpais)
+- Developed by [Dr. Chikashi Miyama](http://chikashi.net)
+- Thanks to: [Dan Wilcox](https://github.com/danomatika) and [Jakab Valtar](https://github.com/JakubValtar)
 
 ## how to use
-You will find in bin directory leapmotion.dll
-place it in the same directory of you patch and open your patch.
+You will find in bin directory leapmotion.dll .
 
-You will also need leap.dll from Leap. download leap SDK and place it in the same directory.
+Place it in the same directory of you patch and open your patch. You will also need leap.dll from Leap. download leap SDK and place it in the same directory.
+
+In the patch, you can instantiate the leapmotion object.
+
+You can find an example patch in examples folder.
 
 ## how to build
 ### prerequisite
