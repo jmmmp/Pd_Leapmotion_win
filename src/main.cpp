@@ -2,6 +2,8 @@
 #include "Leap.h"
 #include "LeapMath.h"
 #include "Dispatcher.h"
+#include "FlagHolder.h"
+#include "Utils.h"
 
 // check for appropriate flext version
 #if !defined(FLEXT_VERSION) || (FLEXT_VERSION < 400)
@@ -16,34 +18,12 @@ class leapmotion: public flext_base
     // Create a sample listener and controller
     Dispatcher dispatcher;
     Controller controller;
-    
-    int general_flag;
-    
-    int hands_sphere_radius_flag;
-    int hands_sphere_center_flag;
-    
-    int hands_direction_flag;
-    int hands_palm_normal_flag;
-    int hands_palm_position_flag;
-    int hands_palm_velocity_flag;
-    
-    int hands_tool_count_flag;
-    int hands_finger_count_flag;
-    
-    int tools_direction_flag;
-    int tools_position_flag;
-    int tools_velocity_flag;
-    int tools_size_flag;
-    
-    int fingers_direction_flag;
-    int fingers_position_flag;
-    int fingers_velocity_flag;
-    int fingers_size_flag;
-    int gestures_flag;
+
+	FlagHolder flagHolder;
+ 
     
 public:
-    leapmotion()
-    {
+    leapmotion(){
         AddInAnything(); 
         AddOutList();  // general info
         AddOutList();  // hands, fingers, tools
@@ -51,28 +31,7 @@ public:
 
         // register methods
         FLEXT_ADDMETHOD(0,m_bang);
-        FLEXT_ADDMETHOD_(0, "general", m_general);
-        FLEXT_ADDMETHOD_(0, "hands_direction", m_hands_direction);
-        FLEXT_ADDMETHOD_(0, "hands_palm_normal", m_hands_palm_normal);
-        FLEXT_ADDMETHOD_(0, "hands_palm_position", m_hands_palm_position);
-        FLEXT_ADDMETHOD_(0, "hands_palm_velocity", m_hands_palm_velocity);
-
-        FLEXT_ADDMETHOD_(0, "hands_sphere_center", m_hands_sphere_center);
-        FLEXT_ADDMETHOD_(0, "hands_sphere_radius", m_hands_sphere_radius);
-        
-        FLEXT_ADDMETHOD_(0, "hands_finger_count", m_hands_finger_count);
-        FLEXT_ADDMETHOD_(0, "hands_tool_count", m_hands_tool_count);
-
-        FLEXT_ADDMETHOD_(0, "tools_direction", m_tools_direction);
-        FLEXT_ADDMETHOD_(0, "tools_position", m_tools_position);
-        FLEXT_ADDMETHOD_(0, "tools_velocity", m_tools_velocity);
-        FLEXT_ADDMETHOD_(0, "tools_size", m_tools_size);
-
-        FLEXT_ADDMETHOD_(0, "fingers_direction", m_fingers_direction);
-        FLEXT_ADDMETHOD_(0, "fingers_position", m_fingers_position);
-        FLEXT_ADDMETHOD_(0, "fingers_velocity", m_fingers_velocity);
-        FLEXT_ADDMETHOD_(0, "fingers_size", m_fingers_size);
-        FLEXT_ADDMETHOD_(0, "gestures", m_gestures);
+        FLEXT_ADDMETHOD_(0, "flag", m_flag);
         FLEXT_ADDMETHOD_(0, "info", m_info);
 
         // Set policy flag so that patch can receive events from
@@ -81,214 +40,157 @@ public:
         
         // Have the sample listener receive events from the controller
         controller.addListener(dispatcher);
-        general_flag = true;
-        
-        hands_direction_flag = false;
-        hands_palm_position_flag = true;
-        hands_palm_velocity_flag = false;
-        hands_palm_normal_flag = false;
-        
-        hands_sphere_center_flag = false;
-        hands_sphere_radius_flag = false;
-        
-        hands_finger_count_flag = false;
-        hands_tool_count_flag = false;
-    
-        tools_direction_flag = false;
-        tools_position_flag = false;
-        tools_velocity_flag = false;
-        tools_size_flag = false;
-
-        fingers_direction_flag = false;
-        fingers_position_flag = false;
-        fingers_velocity_flag = false;
-        fingers_size_flag = false;
-        gestures_flag = false;
-        
+          
     }
-    ~leapmotion()
-    {
+
+    ~leapmotion(){
         // Remove the sample listener when done
         controller.removeListener(dispatcher);
     }
-  
-    void m_bang()
-    {
+    void out_general(const Frame &frame){
+        if (flagHolder.get("general")) {
+            t_atom generalInfo[6];
 
-        Frame frame;
-        t_atom generalInfo[6];
-        int num_hands, num_tools, num_gestures;
-        frame = dispatcher.frame;
-        num_hands = frame.hands().count();
-        num_tools = frame.tools().count();
-        num_gestures = frame.gestures().count();
-        
-        if(general_flag){
             SETFLOAT(&generalInfo[0], (float)frame.id());
             SETFLOAT(&generalInfo[1], (float)frame.timestamp());
-            SETFLOAT(&generalInfo[2], (float)num_hands);
+            SETFLOAT(&generalInfo[2], (float)frame.hands().count());
             SETFLOAT(&generalInfo[3], (float)frame.fingers().count());
             SETFLOAT(&generalInfo[4], (float)frame.tools().count());
             SETFLOAT(&generalInfo[5], (float)frame.gestures().count());
-            ToOutList(0, 6, generalInfo);        
+            ToOutList(OUTLET_GENERAL, 6, generalInfo);        
         }
-        // tools
+    }
+
+    void out_tools(const Frame &frame){
+        int num_tools = frame.tools().count();
         for(int i = 0; i<num_tools; i++){
-            Tool tool;
-            tool = frame.tools()[i];
+            Tool tool= frame.tools()[i];
 
             t_atom toolInfo[5];
-            if(tools_position_flag) {
-                SETFLOAT(&toolInfo[0], i);
-                SETSYMBOL(&toolInfo[1], gensym("direction"));
-                SETFLOAT(&toolInfo[2], tool.direction().x);
-                SETFLOAT(&toolInfo[3], tool.direction().y);
-                SETFLOAT(&toolInfo[4], tool.direction().z);
-                ToOutAnything(1, gensym("tool"), 5, toolInfo);
+            if (flagHolder.get("tools_position")) {
+                auto atoms = makeAtoms(i, "tools_position", tool.direction().x, tool.direction().y, tool.direction().z);
+                ToOutAnything(OUTLET_DATA, gensym("tool"), atoms.size(), &atoms[0]);
             }
-            if(tools_position_flag) {
-                SETFLOAT(&toolInfo[0], i);
-                SETSYMBOL(&toolInfo[1], gensym("position"));
-                SETFLOAT(&toolInfo[2], tool.tipPosition().x);
-                SETFLOAT(&toolInfo[3], tool.tipPosition().y);
-                SETFLOAT(&toolInfo[4], tool.tipPosition().z);
-                ToOutAnything(1, gensym("tool"), 5, toolInfo);
+            if(flagHolder.get("tools_position")) {
+                auto atoms = makeAtoms(i, "tools_position", tool.direction().x, tool.direction().y, tool.direction().z);
+                ToOutAnything(OUTLET_DATA, gensym("tool"), atoms.size(), &atoms[0]);
             }
-            if(tools_velocity_flag){
-                SETFLOAT(&toolInfo[0], i);
-                SETSYMBOL(&toolInfo[1], gensym("velocity"));
-                SETFLOAT(&toolInfo[2], tool.tipVelocity().x);
-                SETFLOAT(&toolInfo[3], tool.tipVelocity().y);
-                SETFLOAT(&toolInfo[4], tool.tipVelocity().z);
-                ToOutAnything(1, gensym("tool"), 5, toolInfo);
+            if(flagHolder.get("tools_velocity")){
+                auto atoms = makeAtoms(i, "tools_velocity", tool.direction().x, tool.direction().y, tool.direction().z);
+                ToOutAnything(OUTLET_DATA, gensym("tool"), atoms.size(), &atoms[0]);
             }
-            if(tools_size_flag){
-                SETFLOAT(&toolInfo[0], i); 
-                SETSYMBOL(&toolInfo[1], gensym("size"));
-                SETFLOAT(&toolInfo[2], tool.width());
-                SETFLOAT(&toolInfo[3], tool.length());
-                ToOutAnything(1, gensym("tool"), 4, toolInfo);
+            if(flagHolder.get("tools_size")){
+                auto atoms = makeAtoms(i, "tools_size", tool.direction().x, tool.direction().y, tool.direction().z);
+                ToOutAnything(OUTLET_DATA, gensym("tool"), atoms.size(), &atoms[0]);
             }
         }
-        // hands and fingers
+    }
+    void out_hands(const Frame &frame){
+        int num_hands = frame.hands().count();
         for(int i = 0; i<num_hands; i++){
-            Hand hand;
-            hand = frame.hands()[i];
+            Hand hand = frame.hands()[i];
             int num_fingers = hand.fingers().count();
             int num_tools = hand.tools().count();
-            t_atom handInfo[5];
 
-            if(hands_direction_flag){
-                // direction
-                SETFLOAT(&handInfo[0], i);
-                SETSYMBOL(&handInfo[1], gensym("direction"));
-                SETFLOAT(&handInfo[2], hand.direction().x);
-                SETFLOAT(&handInfo[3], hand.direction().y);
-                SETFLOAT(&handInfo[4], hand.direction().z);
-                ToOutAnything(1, gensym("hand"), 5, handInfo);
+            if(flagHolder.get("hands_direction")){
+                auto atoms = makeAtoms(i, "hands_direction", hand.direction().x, hand.direction().y, hand.direction().z);
+                ToOutAnything(OUTLET_DATA, gensym("hand"), atoms.size(), &atoms[0]);
             }
-            if(hands_palm_position_flag){
-                // position
-                SETFLOAT(&handInfo[0], i);
-                SETSYMBOL(&handInfo[1], gensym("palm_position"));
-                SETFLOAT(&handInfo[2], hand.palmPosition().x);
-                SETFLOAT(&handInfo[3], hand.palmPosition().y);
-                SETFLOAT(&handInfo[4], hand.palmPosition().z);
-                ToOutAnything(1, gensym("hand"), 5, handInfo);
+            if(flagHolder.get("hands_palm_position")){
+                auto atoms = makeAtoms(i, "hands_palm_position", hand.palmPosition().x, hand.palmPosition().y, hand.palmPosition().z);
+                ToOutAnything(OUTLET_DATA, gensym("hand"), atoms.size(), &atoms[0]);
             }
-            if(hands_palm_velocity_flag){
-                // velocity
-                SETFLOAT(&handInfo[0], i);
-                SETSYMBOL(&handInfo[1], gensym("palm_velocity"));
-                SETFLOAT(&handInfo[2], hand.palmVelocity().x);
-                SETFLOAT(&handInfo[3], hand.palmVelocity().y);
-                SETFLOAT(&handInfo[4], hand.palmVelocity().z);
-                ToOutAnything(1, gensym("hand"), 5, handInfo);
+            if(flagHolder.get("hands_palm_velocity")){
+                auto atoms = makeAtoms(i, "hands_palm_velocity", hand.palmVelocity().x, hand.palmVelocity().y, hand.palmVelocity().z);
+                ToOutAnything(OUTLET_DATA, gensym("hand"), atoms.size(), &atoms[0]);
             }
-            if(hands_palm_normal_flag){
-                // normal
-                SETFLOAT(&handInfo[0], i);
-                SETSYMBOL(&handInfo[1], gensym("palm_normal"));
-                SETFLOAT(&handInfo[2], hand.palmNormal().x);
-                SETFLOAT(&handInfo[3], hand.palmNormal().y);
-                SETFLOAT(&handInfo[4], hand.palmNormal().z);
-                ToOutAnything(1, gensym("hand"), 5, handInfo);
+            if(flagHolder.get("hands_palm_normal")) {
+                auto atoms = makeAtoms(i, "hands_palm_normal", hand.palmNormal().x, hand.palmNormal().y, hand.palmNormal().z);
+                ToOutAnything(OUTLET_DATA, gensym("hand"), atoms.size(), &atoms[0]);
             }
-            if(hands_sphere_radius_flag){
-                // sphere radius
-                SETFLOAT(&handInfo[0], i);
-                SETSYMBOL(&handInfo[1], gensym("sphere_radius"));
-                SETFLOAT(&handInfo[2], hand.sphereRadius());
-                ToOutAnything(1, gensym("hand"), 3, handInfo);
+            if(flagHolder.get("hands_sphere_radius")){
+                auto atoms = makeAtoms(i, "hands_sphere_radius", hand.sphereRadius());
+                ToOutAnything(OUTLET_DATA, gensym("hand"), atoms.size(), &atoms[0]);
             }
-            if(hands_sphere_center_flag){
-                // sphere center
-                SETFLOAT(&handInfo[0], i);
-                SETSYMBOL(&handInfo[1], gensym("sphere_center"));
-                SETFLOAT(&handInfo[2], hand.sphereCenter().x);
-                SETFLOAT(&handInfo[3], hand.sphereCenter().y);
-                SETFLOAT(&handInfo[4], hand.sphereCenter().z);
-                ToOutAnything(1, gensym("hand"), 5, handInfo);
+            if(flagHolder.get("hands_sphere_center")){
+                auto atoms = makeAtoms(i, "hands_sphere_center", hand.sphereCenter().x, hand.sphereCenter().y, hand.sphereCenter().z);
+                ToOutAnything(OUTLET_DATA, gensym("hand"), atoms.size(), &atoms[0]);
             }
-            if(hands_finger_count_flag){
-                // finger count
-                SETFLOAT(&handInfo[0], i);
-                SETSYMBOL(&handInfo[1], gensym("finger_count"));
-                SETFLOAT(&handInfo[2], num_fingers);
-                ToOutAnything(1, gensym("hand"), 3, handInfo);
+            if(flagHolder.get("hands_finger_count")){
+                auto atoms = makeAtoms(i, "hands_finger_count", num_fingers);
+                ToOutAnything(OUTLET_DATA, gensym("hand"), atoms.size(), &atoms[0]);
             }
-            if(hands_tool_count_flag){
-                // tool count
-                SETFLOAT(&handInfo[0], i);
-                SETSYMBOL(&handInfo[1], gensym("tool_count"));
-                SETFLOAT(&handInfo[2], num_tools);
-                ToOutAnything(1, gensym("hand"), 3, handInfo);
+            if(flagHolder.get("hands_tool_count")){
+                auto atoms = makeAtoms(i, "hands_tool_count", num_tools);
+                ToOutAnything(OUTLET_DATA, gensym("hand"), atoms.size(), &atoms[0]);
             }
-            for(int j = 0; j<num_fingers; j++){
-                Finger finger;
-                finger = hand.fingers()[j];                    
-                t_atom fingerInfo[7];
-                if(fingers_direction_flag){
-                    SETFLOAT(&fingerInfo[0], i); // index
-                    SETSYMBOL(&fingerInfo[1], gensym("fingers"));
-                    SETFLOAT(&fingerInfo[2], j);
-                    SETSYMBOL(&fingerInfo[3], gensym("direction"));
-                    SETFLOAT(&fingerInfo[4], finger.direction().x);
-                    SETFLOAT(&fingerInfo[5], finger.direction().y);
-                    SETFLOAT(&fingerInfo[6], finger.direction().z);
-                    ToOutAnything(1, gensym("hand"), 7, fingerInfo);
-                }
-                if(fingers_position_flag){
-                    SETFLOAT(&fingerInfo[0], i); // index
-                    SETSYMBOL(&fingerInfo[1], gensym("fingers"));
-                    SETFLOAT(&fingerInfo[2], j);
-                    SETSYMBOL(&fingerInfo[3], gensym("position"));
-                    SETFLOAT(&fingerInfo[4], finger.tipPosition().x);
-                    SETFLOAT(&fingerInfo[5], finger.tipPosition().y);
-                    SETFLOAT(&fingerInfo[6], finger.tipPosition().z);
-                    ToOutAnything(1, gensym("hand"), 7, fingerInfo);
-                }
-                if(fingers_velocity_flag){
-                    SETFLOAT(&fingerInfo[0], i); // index
-                    SETSYMBOL(&fingerInfo[1], gensym("fingers"));
-                    SETFLOAT(&fingerInfo[2], j);
-                    SETSYMBOL(&fingerInfo[3], gensym("velocity"));
-                    SETFLOAT(&fingerInfo[4], finger.tipVelocity().x);
-                    SETFLOAT(&fingerInfo[5], finger.tipVelocity().y);
-                    SETFLOAT(&fingerInfo[6], finger.tipVelocity().z);
-                    ToOutAnything(1, gensym("hand"), 7, fingerInfo);
-                }
-                if(fingers_size_flag){
-                    SETFLOAT(&fingerInfo[0], i); // index
-                    SETSYMBOL(&fingerInfo[1], gensym("fingers"));
-                    SETFLOAT(&fingerInfo[2], j);
-                    SETSYMBOL(&fingerInfo[3], gensym("size"));
-                    SETFLOAT(&fingerInfo[4], finger.width());
-                    SETFLOAT(&fingerInfo[5], finger.length());
-                    ToOutAnything(1, gensym("hand"), 6, fingerInfo);
-                }
+            out_fingers(i, hand);
+        }
+
+    }
+    void out_fingers(int handIndex, const Hand &hand){
+        int num_fingers = hand.fingers().count();
+        for(int j = 0; j<num_fingers; j++){
+            Finger finger;
+            finger = hand.fingers()[j];                    
+            t_atom fingerInfo[7];
+            if(flagHolder.get("fingers_direction")){
+                SETFLOAT(&fingerInfo[0], handIndex); // index
+                SETSYMBOL(&fingerInfo[1], gensym("fingers"));
+                SETFLOAT(&fingerInfo[2], j);
+                SETSYMBOL(&fingerInfo[3], gensym("direction"));
+                SETFLOAT(&fingerInfo[4], finger.direction().x);
+                SETFLOAT(&fingerInfo[5], finger.direction().y);
+                SETFLOAT(&fingerInfo[6], finger.direction().z);
+                ToOutAnything(OUTLET_DATA, gensym("hand"), 7, fingerInfo);
+            }
+            if(flagHolder.get("fingers_position")){
+                SETFLOAT(&fingerInfo[0], handIndex); // index
+                SETSYMBOL(&fingerInfo[1], gensym("fingers"));
+                SETFLOAT(&fingerInfo[2], j);
+                SETSYMBOL(&fingerInfo[3], gensym("position"));
+                SETFLOAT(&fingerInfo[4], finger.tipPosition().x);
+                SETFLOAT(&fingerInfo[5], finger.tipPosition().y);
+                SETFLOAT(&fingerInfo[6], finger.tipPosition().z);
+                ToOutAnything(OUTLET_DATA, gensym("hand"), 7, fingerInfo);
+            }
+            if(flagHolder.get("fingers_velocity")){
+                SETFLOAT(&fingerInfo[0], handIndex); // index
+                SETSYMBOL(&fingerInfo[1], gensym("fingers"));
+                SETFLOAT(&fingerInfo[2], j);
+                SETSYMBOL(&fingerInfo[3], gensym("velocity"));
+                SETFLOAT(&fingerInfo[4], finger.tipVelocity().x);
+                SETFLOAT(&fingerInfo[5], finger.tipVelocity().y);
+                SETFLOAT(&fingerInfo[6], finger.tipVelocity().z);
+                ToOutAnything(OUTLET_DATA, gensym("hand"), 7, fingerInfo);
+            }
+            if(flagHolder.get("fingers_size")){
+                SETFLOAT(&fingerInfo[0], handIndex); // index
+                SETSYMBOL(&fingerInfo[1], gensym("fingers"));
+                SETFLOAT(&fingerInfo[2], j);
+                SETSYMBOL(&fingerInfo[3], gensym("size"));
+                SETFLOAT(&fingerInfo[4], finger.width());
+                SETFLOAT(&fingerInfo[5], finger.length());
+                ToOutAnything(OUTLET_DATA, gensym("hand"), 6, fingerInfo);
             }
         }
+    }
+
+    void m_bang(){
+
+        Frame frame = dispatcher.frame;
+        int num_hands = frame.hands().count();
+        int num_tools = frame.tools().count();
+        int num_gestures = frame.gestures().count();
+
+        out_general(frame);
+        out_tools(frame);
+        out_hands(frame);
+
+        // hands and fingers
+  
+
+
         t_atom gestureCountInfo[1];            
         for(int i = 0;i < num_gestures; i++){
             Gesture gesture;
@@ -297,8 +199,7 @@ public:
             t_atom gestureTypeInfo[3];
             SETFLOAT(&gestureTypeInfo[0], i);
             SETSYMBOL(&gestureTypeInfo[1], gensym("type"));
-            switch(gesture.type())
-            {
+            switch(gesture.type()){
                 case Gesture::TYPE_INVALID:
                     SETSYMBOL(&gestureTypeInfo[2], gensym("TYPE_INVALID"));
                     break;
@@ -315,7 +216,7 @@ public:
                     SETSYMBOL(&gestureTypeInfo[2], gensym("TYPE_KEY_TAP"));
                     break;
             }
-            ToOutList(2, 3, gestureTypeInfo);
+            ToOutList(OUTLET_GESTURE, 3, gestureTypeInfo);
 
             //state
             t_atom gestureStateInfo[3];
@@ -336,92 +237,36 @@ public:
                     SETSYMBOL(&gestureStateInfo[2], gensym("TYPE_STOP"));
                     break;
             }
-            ToOutList(2, 3, gestureStateInfo);
+            ToOutList(OUTLET_GESTURE, 3, gestureStateInfo);
 
             t_atom gestureDurationInfo[3];
             SETFLOAT(&gestureDurationInfo[0], i);
             SETSYMBOL(&gestureDurationInfo[1], gensym("duration"));
             SETFLOAT(&gestureDurationInfo[2], gesture.duration());
-            ToOutList(2, 3, gestureDurationInfo);
+            ToOutList(OUTLET_GESTURE, 3, gestureDurationInfo);
 
             t_atom gestureIdInfo[3];
             SETFLOAT(&gestureIdInfo[0], i);
             SETSYMBOL(&gestureIdInfo[1], gensym("id"));
             SETFLOAT(&gestureIdInfo[2], gesture.id());
-            ToOutList(2, 3, gestureIdInfo);
+            ToOutList(OUTLET_GESTURE, 3, gestureIdInfo);
 
         }
     }
-    void m_general(int s)
-    {
-        general_flag = s;
+
+	void m_flag(int argc, t_atom *argv){
+		if (argc != 2) {
+			post("flag message must contain two elements. flag name and 1 or 0");
+			return;
+		}
+
+		std::string flagName = GetAString(argv[0]);
+		bool flag = static_cast<bool>(GetAInt(argv[1]));
+
+		flagHolder.set(flagName, flag);
     }
-    void m_hands_direction(int s)
-    {
-        hands_direction_flag = s;
-    }
-    void m_hands_palm_position(int s)
-    {
-        hands_palm_position_flag = s;
-    }
-    void m_hands_palm_velocity(int s)
-    {
-        hands_palm_velocity_flag = s;
-    }
-    void m_hands_palm_normal(int s)
-    {
-        hands_palm_normal_flag = s;
-    }
-    void m_hands_finger_count(int s)
-    {
-        hands_finger_count_flag = s;
-    }
-    void m_hands_tool_count(int s)
-    {
-        hands_tool_count_flag = s;
-    }
-    void m_hands_sphere_radius(int s)
-    {
-        hands_sphere_radius_flag = s;
-    }
-    void m_hands_sphere_center(int s)
-    {
-        hands_sphere_center_flag = s;
-    }
-    void m_tools_direction(int s)
-    {
-        tools_direction_flag = s;
-    }
-    void m_tools_position(int s)
-    {
-        tools_position_flag = s;
-    }
-    void m_tools_velocity(int s)
-    {
-        tools_velocity_flag = s;
-    }
-    void m_tools_size(int s)
-    {
-        tools_size_flag = s;
-    }
-    void m_fingers_direction(int s)
-    {
-        fingers_direction_flag = s;
-    }
-    void m_fingers_position(int s)
-    {
-        fingers_position_flag = s;
-    }
-    void m_fingers_velocity(int s)
-    {
-        fingers_velocity_flag = s;
-    }
-    void m_fingers_size(int s)
-    {
-        fingers_size_flag = s;
-    }
-    void m_gestures(int argc, const t_atom *argv)
-    {
+
+    void m_gestures(int argc, const t_atom *argv){
         if(argc > 2){
             post("leapmotion: gestures too many arguments");
         }
@@ -466,73 +311,39 @@ public:
             }
         }
     }
-    void m_info()
-    {
-        post("-LEAP SETTING-");
-        post("General Info:%s", flag_to_string(general_flag));
-        
-        post("-Hands-");
-        post("direction:%s", flag_to_string(hands_direction_flag));
-        post("palm position:%s", flag_to_string(hands_palm_position_flag));
-        post("palm velocity:%s", flag_to_string(hands_palm_velocity_flag));
-        post("palm normal:%s", flag_to_string(hands_palm_normal_flag));
+	void m_info() {
+		flagHolder.print();
+		post("-Gestures-");
+		post("TYPE_CIRCLE:%s", bool_to_string(controller.isGestureEnabled(Gesture::TYPE_CIRCLE)));
+		post("TYPE_SWIPE:%s", bool_to_string(controller.isGestureEnabled(Gesture::TYPE_SWIPE)));
+		post("TYPE_KEY_TAP:%s", bool_to_string(controller.isGestureEnabled(Gesture::TYPE_KEY_TAP)));
+		post("TYPE_SCREEN_TAP:%s", bool_to_string(controller.isGestureEnabled(Gesture::TYPE_SCREEN_TAP)));
 
-        post("finger count:%s", flag_to_string(hands_finger_count_flag));
-        post("tool count:%s", flag_to_string(hands_tool_count_flag));
-        post("sphere radius:%s", flag_to_string(hands_sphere_radius_flag));
-        post("sphere center:%s", flag_to_string(hands_sphere_center_flag));
-        
-        post("-Tools-");
-        post("direction:%s", flag_to_string(tools_direction_flag));
-        post("position:%s", flag_to_string(tools_position_flag));
-        post("velocity:%s", flag_to_string(tools_velocity_flag));
-        post("size:%s", flag_to_string(tools_size_flag));
-        
-        post("-Fingers-");
-        post("direction:%s", flag_to_string(fingers_direction_flag));
-        post("position:%s", flag_to_string(fingers_position_flag));
-        post("velocity:%s", flag_to_string(fingers_velocity_flag));
-        post("size:%s", flag_to_string(fingers_size_flag));
-        
-        post("-Gestures-");
-        post("TYPE_CIRCLE:%s", flag_to_string(controller.isGestureEnabled(Gesture::TYPE_CIRCLE)));
-        post("TYPE_SWIPE:%s", flag_to_string(controller.isGestureEnabled(Gesture::TYPE_SWIPE)));
-        post("TYPE_KEY_TAP:%s", flag_to_string(controller.isGestureEnabled(Gesture::TYPE_KEY_TAP)));
-        post("TYPE_SCREEN_TAP:%s", flag_to_string(controller.isGestureEnabled(Gesture::TYPE_SCREEN_TAP)));
 
+        Config config = controller.config();
+
+        post("-Config-");
+        post("Circle MinRadius:%f", config.getFloat("Gesture.Circle.MinRadius"));
+        post("Circle MinArc:%f", config.getFloat("Gesture.Circle.MinArc"));
+
+        post("Swipe MinLength:%f",  config.getFloat("Gesture.Swipe.MinLength"));
+        post("Swipe MinVelocity:%f",  config.getFloat("Gesture.Swipe.MinVelocity"));
+
+        post("KeyTap MinDownVelocity:%f",  config.getFloat("Gesture.KeyTap.MinDownVelocity"));
+        post("KeyTap HistorySeconds:%f",  config.getFloat("Gesture.KeyTap.HistorySeconds"));
+        post("KeyTap MinDistance:%f",  config.getFloat("Gesture.KeyTap.MinDistance"));
+
+        post("ScreenTap MinForwardVelocity:%f",  config.getFloat("Gesture.ScreenTap.MinForwardVelocity"));
+        post("ScreenTap HistorySeconds:%f",  config.getFloat("Gesture.ScreenTap.HistorySeconds"));
+        post("ScreenTap MinDistance:%f",  config.getFloat("Gesture.ScreenTap.MinDistance"));
     }
+
+
 private:
-    
-    const char* flag_to_string(int flag)
-    {
-        if(flag){
-            return "on";
-        }else{
-            return "off";
-        }
-    }
+
     FLEXT_CALLBACK(m_info);
     FLEXT_CALLBACK(m_bang);
-    FLEXT_CALLBACK_I(m_general);
-    FLEXT_CALLBACK_I(m_hands_direction);
-    FLEXT_CALLBACK_I(m_hands_palm_position);
-    FLEXT_CALLBACK_I(m_hands_palm_velocity);
-    FLEXT_CALLBACK_I(m_hands_palm_normal);
-
-    FLEXT_CALLBACK_I(m_hands_sphere_radius);
-    FLEXT_CALLBACK_I(m_hands_sphere_center);
-    FLEXT_CALLBACK_I(m_hands_finger_count);
-    FLEXT_CALLBACK_I(m_hands_tool_count);
-
-    FLEXT_CALLBACK_I(m_tools_direction);
-    FLEXT_CALLBACK_I(m_tools_position);
-    FLEXT_CALLBACK_I(m_tools_velocity);
-    FLEXT_CALLBACK_I(m_tools_size);
-    FLEXT_CALLBACK_I(m_fingers_direction);
-    FLEXT_CALLBACK_I(m_fingers_position);
-    FLEXT_CALLBACK_I(m_fingers_velocity);
-    FLEXT_CALLBACK_I(m_fingers_size);
-    FLEXT_CALLBACK_V(m_gestures);
+	FLEXT_CALLBACK_V(m_flag);
 };
 
 FLEXT_NEW("leapmotion",leapmotion)

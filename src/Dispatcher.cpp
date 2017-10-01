@@ -4,7 +4,7 @@
 using namespace Leap;
 
 void Dispatcher::onInit(const Controller& controller) {
-    post("Leap Motion for Pd Ver 0.1 for windows");
+    post("Leap Motion for Pd Ver 0.2 for windows");
 }
 
 void Dispatcher::onConnect(const Controller& controller) {
