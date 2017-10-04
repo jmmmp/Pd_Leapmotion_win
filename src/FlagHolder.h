@@ -35,6 +35,11 @@ inline void FlagHolder::set(const std::string &flagName, bool flag) {
 
 inline void FlagHolder::print() {
 	post("General Info:%s", flag_to_string("general"));
+	post("-Interaction Box-");
+	post("center:%s", flag_to_string("interaction_box_center"));
+	post("width:%s", flag_to_string("interaction_box_width"));
+	post("height:%s", flag_to_string("interaction_box_height"));
+	post("depth:%s", flag_to_string("interaction_box_depth"));
 
 	post("-Hands-");
 	post("direction:%s", flag_to_string("hands_direction"));
@@ -58,6 +63,7 @@ inline void FlagHolder::print() {
 	post("position:%s", flag_to_string("fingers_position"));
 	post("velocity:%s", flag_to_string("fingers_velocity"));
 	post("size:%s", flag_to_string("fingers_size"));
+	post("type:%s", flag_to_string("fingers_type"));
 
 }
 

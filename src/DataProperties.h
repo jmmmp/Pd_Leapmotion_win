@@ -7,10 +7,12 @@ constexpr int OUTLET_GENERAL = 0;
 constexpr int OUTLET_DATA = 1;
 constexpr int OUTLET_GESTURE = 2;
 
-
 const std::vector<std::string> flagNameList = {
 	"general",
-
+	"interaction_box_center",
+	"interaction_box_width",
+	"interaction_box_height",
+	"interaction_box_depth",
 	"hands_sphere_radius",
 	"hands_sphere_center",
 	"hands_direction",
@@ -29,9 +31,9 @@ const std::vector<std::string> flagNameList = {
 	"fingers_position",
 	"fingers_velocity",
 	"fingers_size",
+	"fingers_type",
 	"gestures"
 };
-
 
 struct ReturnType{
 	std::vector<std::string> directoryNames;
@@ -43,7 +45,10 @@ struct ReturnType{
 };
 
 std::unordered_map<std::string, ReturnType> returnTypes({
-
+	std::make_pair<std::string, ReturnType>("interaction_box_center", ReturnType("center", "")),
+	std::make_pair<std::string, ReturnType>("interaction_box_width",ReturnType("width", "")),
+	std::make_pair<std::string, ReturnType>("interaction_box_height",ReturnType("height", "")),
+	std::make_pair<std::string, ReturnType>("interaction_box_depth",ReturnType("depth", "")),
  	std::make_pair<std::string, ReturnType>("hands_direction", ReturnType("direction", "")),
  	std::make_pair<std::string, ReturnType>("hands_palm_position", ReturnType("palm", "position")),
   	std::make_pair<std::string, ReturnType>("hands_palm_velocity", ReturnType("palm", "velocity")),
@@ -55,10 +60,11 @@ std::unordered_map<std::string, ReturnType> returnTypes({
  	std::make_pair<std::string, ReturnType>("hands_tool_count", ReturnType("tool", "count")),
  	std::make_pair<std::string, ReturnType>("hands_finger_count", ReturnType("finger", "count")),
 
- 	std::make_pair<std::string, ReturnType>("hands_finger_direction", ReturnType("finger", "direction")),
- 	std::make_pair<std::string, ReturnType>("hands_finger_position", ReturnType("finger", "position")),
- 	std::make_pair<std::string, ReturnType>("hands_finger_position", ReturnType("finger", "position")),
- 	std::make_pair<std::string, ReturnType>("hands_finger_position", ReturnType("finger", "position")),
+ 	std::make_pair<std::string, ReturnType>("hands_finger_direction", ReturnType("direction","")),
+ 	std::make_pair<std::string, ReturnType>("hands_finger_position", ReturnType("position","")),
+ 	std::make_pair<std::string, ReturnType>("hands_finger_velocity", ReturnType("velocity","")),
+ 	std::make_pair<std::string, ReturnType>("hands_finger_size", ReturnType("size","")),
+ 	std::make_pair<std::string, ReturnType>("hands_finger_type", ReturnType("type","")),
 
  	std::make_pair<std::string, ReturnType>("tools_direction", ReturnType("direction", "")),
  	std::make_pair<std::string, ReturnType>("tools_position", ReturnType("position", "")),
@@ -66,16 +72,23 @@ std::unordered_map<std::string, ReturnType> returnTypes({
  	std::make_pair<std::string, ReturnType>("tools_size", ReturnType("size", ""))
 });
 
+inline ReturnType getReturnType(const std::string &key){
+	try{
+		return returnTypes.at(key);
+	}catch(std::out_of_range &e){
+		post("%s is an invalid key", key.c_str());
+		return ReturnType("invalid", "");
+	}
+}
+
 inline std::vector<t_atom> allocateVector(const std::string &name, int baseSize){
-	auto returnType = returnTypes.at(name);
+	auto returnType = getReturnType(name);
 	std::vector<t_atom> vector;
 	vector.resize(baseSize+returnType.directoryNames.size());
 	return std::move(vector);
 }
 
-
-inline int setDataNames(std::vector<t_atom> &vector, ReturnType &returnType){
-	int index = 1;
+inline int setDataNames(std::vector<t_atom> &vector, ReturnType &returnType, int index = 1){
 	for(int i = 0; i < returnType.directoryNames.size(); i++){
     	SETSYMBOL(&vector[index], gensym(returnType.directoryNames[i].c_str()));
     	index++;
@@ -86,7 +99,7 @@ inline int setDataNames(std::vector<t_atom> &vector, ReturnType &returnType){
 inline std::vector<t_atom>makeAtoms(int handIndex, const std::string &name, float value){
 	auto vector = allocateVector(name, 2);
 	SETFLOAT(&vector[0], handIndex);
-	int index = setDataNames(vector, returnTypes.at(name));
+	int index = setDataNames(vector, getReturnType(name));
 	SETFLOAT(&vector[index], value);
 	return vector;
 }
@@ -94,19 +107,7 @@ inline std::vector<t_atom>makeAtoms(int handIndex, const std::string &name, floa
 inline std::vector<t_atom>makeAtoms(int handIndex, const std::string &name, float x, float y, float z){
 	auto vector = allocateVector(name, 4);
     SETFLOAT(&vector[0], handIndex);
-	int index = setDataNames(vector, returnTypes.at(name));
-	SETFLOAT(&vector[index], x);
-	SETFLOAT(&vector[index+1], y);
-	SETFLOAT(&vector[index+2], z);
-	return vector;
-}
-
-inline std::vector<t_atom>makeFingerAtoms(int handIndex, int fingerIndex const std::string &name, float x, float y, float z){
-	auto vector = allocateVector(name, 6);
-    SETFLOAT(&vector[0], handIndex);
-   	SETSYMBOL(&vector[1], handIndex);
-
-	int index = setDataNames(vector, returnTypes.at(name));
+	int index = setDataNames(vector, getReturnType(name));
 	SETFLOAT(&vector[index], x);
 	SETFLOAT(&vector[index+1], y);
 	SETFLOAT(&vector[index+2], z);
