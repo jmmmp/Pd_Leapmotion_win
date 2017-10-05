@@ -52,6 +52,9 @@ inline void FlagHolder::print() {
 	post("sphere radius:%s", flag_to_string("hands_sphere_radius"));
 	post("sphere center:%s", flag_to_string("hands_sphere_center"));
 
+	post("is left:%s", flag_to_string("hands_is_left"));
+	post("is right:%s", flag_to_string("hands_is_right"));
+
 	post("-Tools-");
 	post("direction:%s", flag_to_string("tools_direction"));
 	post("position:%s", flag_to_string("tools_position"));
@@ -59,6 +62,7 @@ inline void FlagHolder::print() {
 	post("size:%s", flag_to_string("tools_size"));
 
 	post("-Fingers-");
+	post("extended fingers only:%s", flag_to_string("fingers_extended"));
 	post("direction:%s", flag_to_string("fingers_direction"));
 	post("position:%s", flag_to_string("fingers_position"));
 	post("velocity:%s", flag_to_string("fingers_velocity"));

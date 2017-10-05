@@ -15,6 +15,8 @@ const std::vector<std::string> flagNameList = {
 	"interaction_box_depth",
 	"hands_sphere_radius",
 	"hands_sphere_center",
+	"hands_is_left",
+	"hands_is_right",
 	"hands_direction",
 	"hands_palm_normal",
 	"hands_palm_position",
@@ -27,11 +29,13 @@ const std::vector<std::string> flagNameList = {
 	"tools_velocity",
 	"tools_size",
 
+	"fingers_extended",
 	"fingers_direction",
 	"fingers_position",
 	"fingers_velocity",
 	"fingers_size",
 	"fingers_type",
+	"fingers_is_extended",
 	"gestures"
 };
 
@@ -57,6 +61,9 @@ std::unordered_map<std::string, ReturnType> returnTypes({
  	std::make_pair<std::string, ReturnType>("hands_sphere_radius", ReturnType("sphere", "radius")),
  	std::make_pair<std::string, ReturnType>("hands_sphere_center", ReturnType("sphere", "center")),
 
+ 	std::make_pair<std::string, ReturnType>("hands_is_left", ReturnType("is_left", "")),
+ 	std::make_pair<std::string, ReturnType>("hands_is_right", ReturnType("is_right", "")),
+
  	std::make_pair<std::string, ReturnType>("hands_tool_count", ReturnType("tool", "count")),
  	std::make_pair<std::string, ReturnType>("hands_finger_count", ReturnType("finger", "count")),
 
@@ -65,6 +72,7 @@ std::unordered_map<std::string, ReturnType> returnTypes({
  	std::make_pair<std::string, ReturnType>("hands_finger_velocity", ReturnType("velocity","")),
  	std::make_pair<std::string, ReturnType>("hands_finger_size", ReturnType("size","")),
  	std::make_pair<std::string, ReturnType>("hands_finger_type", ReturnType("type","")),
+ 	std::make_pair<std::string, ReturnType>("hands_finger_is_extended", ReturnType("is_extended","")),
 
  	std::make_pair<std::string, ReturnType>("tools_direction", ReturnType("direction", "")),
  	std::make_pair<std::string, ReturnType>("tools_position", ReturnType("position", "")),

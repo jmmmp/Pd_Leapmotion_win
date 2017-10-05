@@ -31,6 +31,8 @@ inline std::vector<t_atom> Fingers::getAtoms(int handIndex, int fingerIndex, con
 		return makeFingerAtoms(handIndex, fingerIndex, name, finger.width(), finger.length());
 	}else if(name == "hands_finger_type"){
 		return makeFingerAtoms(handIndex, fingerIndex, name, finger.type());
+	}else if(name == "hands_finger_is_extended"){
+		return makeFingerAtoms(handIndex, fingerIndex, name, (float)finger.isExtended());
 	}else{
 		post("unknown type");
 		return std::vector<t_atom>();
@@ -44,7 +46,7 @@ inline std::vector<t_atom> Fingers::makeFingerAtoms(int handIndex, int fingerInd
    	SETSYMBOL(&vector[1], gensym("finger"));
    	SETFLOAT(&vector[2], fingerIndex);
 
-	int index = setDataNames(vector, getReturnType(name));
+	int index = setDataNames(vector, getReturnType(name), 3);
 	SETFLOAT(&vector[index], value);
 	return vector;
 

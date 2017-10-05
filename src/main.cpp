@@ -37,6 +37,7 @@ void leapmotion::m_info() {
 void leapmotion::m_bang(){
 
     Frame frame = dispatcher.frame;
+
     int num_hands = frame.hands().count();
     int num_tools = frame.tools().count();
     int num_gestures = frame.gestures().count();
@@ -114,13 +115,14 @@ void leapmotion::m_config(int argc, const t_atom *argv){
 void leapmotion::out_general(const Frame &frame){
     if (flagHolder.get("general")) {
         t_atom generalInfo[7];
-        SETFLOAT(&generalInfo[0], (float)frame.id());
-        SETFLOAT(&generalInfo[1], (float)frame.timestamp());
-        SETFLOAT(&generalInfo[2], (float)frame.hands().count());
-        SETFLOAT(&generalInfo[3], (float)frame.fingers().count());
-        SETFLOAT(&generalInfo[4], (float)frame.tools().count());
-        SETFLOAT(&generalInfo[5], (float)frame.gestures().count());
-        SETFLOAT(&generalInfo[6], (float)frame.isValid());
+        auto fingers = frame.fingers();
+        SETFLOAT(&generalInfo[0], frame.id());
+        SETFLOAT(&generalInfo[1], frame.timestamp());
+        SETFLOAT(&generalInfo[2], frame.hands().count());
+        SETFLOAT(&generalInfo[3], flagHolder.get("fingers_extended") ? fingers.count() : fingers.extended().count());
+        SETFLOAT(&generalInfo[4], frame.tools().count());
+        SETFLOAT(&generalInfo[5], frame.gestures().count());
+        SETFLOAT(&generalInfo[6], frame.isValid());
 
         ToOutList(OUTLET_GENERAL, 7, generalInfo);        
     }
@@ -176,13 +178,12 @@ void leapmotion::out_hands(const Frame &frame){
     int num_hands = frame.hands().count();
     for(int i = 0; i<num_hands; i++){
         Hand hand = frame.hands()[i];
-        int num_fingers = hand.fingers().count();
         int num_tools = hand.tools().count();
 
         if(flagHolder.get("hands_direction")){
             auto atoms = makeAtoms(i, "hands_direction", hand.direction().x, hand.direction().y, hand.direction().z);
             ToOutAnything(OUTLET_DATA, gensym("hand"), atoms.size(), &atoms[0]);
-        }
+        } 
         if(flagHolder.get("hands_palm_position")){
             auto atoms = makeAtoms(i, "hands_palm_position", hand.palmPosition().x, hand.palmPosition().y, hand.palmPosition().z);
             ToOutAnything(OUTLET_DATA, gensym("hand"), atoms.size(), &atoms[0]);
@@ -203,21 +204,34 @@ void leapmotion::out_hands(const Frame &frame){
             auto atoms = makeAtoms(i, "hands_sphere_center", hand.sphereCenter().x, hand.sphereCenter().y, hand.sphereCenter().z);
             ToOutAnything(OUTLET_DATA, gensym("hand"), atoms.size(), &atoms[0]);
         }
-        if(flagHolder.get("hands_finger_count")){
-            auto atoms = makeAtoms(i, "hands_finger_count", num_fingers);
+        if(flagHolder.get("hands_is_left")){
+            auto atoms = makeAtoms(i, "hands_is_left", hand.isLeft());
+            ToOutAnything(OUTLET_DATA, gensym("hand"), atoms.size(), &atoms[0]);
+        }
+        if(flagHolder.get("hands_is_right")){
+            auto atoms = makeAtoms(i, "hands_is_right", hand.isRight());
             ToOutAnything(OUTLET_DATA, gensym("hand"), atoms.size(), &atoms[0]);
         }
         if(flagHolder.get("hands_tool_count")){
             auto atoms = makeAtoms(i, "hands_tool_count", num_tools);
             ToOutAnything(OUTLET_DATA, gensym("hand"), atoms.size(), &atoms[0]);
         }
+
         out_fingers(i, hand);
     }
 }
 
 void leapmotion::out_fingers(int handIndex, const Hand &hand){
-    FingerList fingerList = hand.fingers();
+    FingerList fingerList = flagHolder.get("fingers_extended") ? hand.fingers().extended() : hand.fingers();
+
     Fingers fingers(fingerList);
+    int num_fingers = fingerList.count();
+
+    if(flagHolder.get("hands_finger_count")){
+        auto atoms = makeAtoms(handIndex, "hands_finger_count", num_fingers);
+        ToOutAnything(OUTLET_DATA, gensym("hand"), atoms.size(), &atoms[0]);
+    }
+
     for(int fingerIndex = 0; fingerIndex < fingerList.count(); fingerIndex++){
 
         if(flagHolder.get("fingers_direction")){
@@ -238,6 +252,10 @@ void leapmotion::out_fingers(int handIndex, const Hand &hand){
         }
         if(flagHolder.get("fingers_type")){
             auto atoms = fingers.getAtoms(handIndex, fingerIndex, "hands_finger_type");
+            ToOutAnything(OUTLET_DATA, gensym("hand"), atoms.size(), &atoms[0]);
+        }
+        if(flagHolder.get("fingers_is_extended")){
+            auto atoms = fingers.getAtoms(handIndex, fingerIndex, "hands_finger_is_extended");
             ToOutAnything(OUTLET_DATA, gensym("hand"), atoms.size(), &atoms[0]);
         }
     }
