@@ -13,11 +13,13 @@ gestureFacade(controller){
     AddOutList();  // hands, fingers, tools
     AddOutList();  // gesture info 
     // register methods
+
     FLEXT_ADDMETHOD(0,m_bang);
     FLEXT_ADDMETHOD_(0, "flag", m_flag);
     FLEXT_ADDMETHOD_(0, "info", m_info);
     FLEXT_ADDMETHOD_(0, "config", m_config);
     FLEXT_ADDMETHOD_(0, "gestures", m_gestures);
+
     controller.setPolicyFlags(Controller::POLICY_BACKGROUND_FRAMES);
     controller.addListener(dispatcher);
 
@@ -114,7 +116,7 @@ void leapmotion::m_config(int argc, const t_atom *argv){
 // private functions
 void leapmotion::out_general(const Frame &frame){
     if (flagHolder.get("general")) {
-        t_atom generalInfo[7];
+        t_atom generalInfo[8];
         auto fingers = frame.fingers();
         SETFLOAT(&generalInfo[0], frame.id());
         SETFLOAT(&generalInfo[1], frame.timestamp());
@@ -123,8 +125,9 @@ void leapmotion::out_general(const Frame &frame){
         SETFLOAT(&generalInfo[4], frame.tools().count());
         SETFLOAT(&generalInfo[5], frame.gestures().count());
         SETFLOAT(&generalInfo[6], frame.isValid());
+        SETFLOAT(&generalInfo[7], frame.currentFramesPerSecond());
 
-        ToOutList(OUTLET_GENERAL, 7, generalInfo);        
+        ToOutList(OUTLET_GENERAL, 8, generalInfo);        
     }
 }
 
@@ -212,12 +215,50 @@ void leapmotion::out_hands(const Frame &frame){
             auto atoms = makeAtoms(i, "hands_is_right", hand.isRight());
             ToOutAnything(OUTLET_DATA, gensym("hand"), atoms.size(), &atoms[0]);
         }
+        if(flagHolder.get("hands_grab_strength")){
+        	auto atoms = makeAtoms(i, "hands_grab_strength", hand.grabStrength());
+        	ToOutAnything(OUTLET_DATA, gensym("hand"), atoms.size(), &atoms[0]);
+        }
+        if(flagHolder.get("hands_pinch_strength")){
+        	auto atoms = makeAtoms(i, "hands_pinch_strength", hand.pinchStrength());
+        	ToOutAnything(OUTLET_DATA, gensym("hand"), atoms.size(), &atoms[0]);
+        }
+        if(flagHolder.get("hands_time_visible")){
+        	auto atoms = makeAtoms(i, "hands_time_visible", hand.timeVisible());
+        	ToOutAnything(OUTLET_DATA, gensym("hand"), atoms.size(), &atoms[0]);
+        }
         if(flagHolder.get("hands_tool_count")){
             auto atoms = makeAtoms(i, "hands_tool_count", num_tools);
             ToOutAnything(OUTLET_DATA, gensym("hand"), atoms.size(), &atoms[0]);
         }
 
+        out_arm(i, hand);
         out_fingers(i, hand);
+    }
+}
+
+void leapmotion::out_arm(int handIndex, const Hand &hand){
+	auto arm = hand.arm();
+	if(flagHolder.get("arms_center")){
+        auto atoms = makeAtoms(handIndex, "hands_arms_center", arm.center());
+        ToOutAnything(OUTLET_DATA, gensym("hand"), atoms.size(), &atoms[0]);
+    }
+    if(flagHolder.get("arms_direction")){
+        auto atoms = makeAtoms(handIndex, "hands_arms_direction", arm.direction());
+        ToOutAnything(OUTLET_DATA, gensym("hand"), atoms.size(), &atoms[0]);
+    }
+	if(flagHolder.get("arms_elbow_position")){
+		auto ePos = arm.elbowPosition();
+        auto atoms = makeAtoms(handIndex, "hands_arms_elbow_position", arm.elbowPosition());
+        ToOutAnything(OUTLET_DATA, gensym("hand"), atoms.size(), &atoms[0]);
+    }
+    if(flagHolder.get("arms_wrist_position")){
+        auto atoms = makeAtoms(handIndex, "hands_arms_wrist_position", arm.wristPosition());
+        ToOutAnything(OUTLET_DATA, gensym("hand"), atoms.size(), &atoms[0]);
+    }
+    if(flagHolder.get("arms_width")){
+        auto atoms = makeAtoms(handIndex, "hands_arms_width", arm.width());
+        ToOutAnything(OUTLET_DATA, gensym("hand"), atoms.size(), &atoms[0]);
     }
 }
 

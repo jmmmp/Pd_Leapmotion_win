@@ -23,6 +23,15 @@ const std::vector<std::string> flagNameList = {
 	"hands_palm_velocity",
 	"hands_tool_count",
 	"hands_finger_count",
+	"hands_grab_strength",
+	"hands_pinch_strength",
+	"hands_time_visible",
+
+	"arms_center",
+	"arms_direction",
+	"arms_elbow_position",
+	"arms_wrist_position",
+	"arms_width",
 
 	"tools_direction",
 	"tools_position",
@@ -63,6 +72,9 @@ std::unordered_map<std::string, ReturnType> returnTypes({
 
  	std::make_pair<std::string, ReturnType>("hands_is_left", ReturnType("is_left", "")),
  	std::make_pair<std::string, ReturnType>("hands_is_right", ReturnType("is_right", "")),
+ 	std::make_pair<std::string, ReturnType>("hands_grab_strength", ReturnType("grab_strength", "")),
+ 	std::make_pair<std::string, ReturnType>("hands_pinch_strength", ReturnType("pinch_strength", "")),
+ 	std::make_pair<std::string, ReturnType>("hands_time_visible", ReturnType("time_visible", "")),
 
  	std::make_pair<std::string, ReturnType>("hands_tool_count", ReturnType("tool", "count")),
  	std::make_pair<std::string, ReturnType>("hands_finger_count", ReturnType("finger", "count")),
@@ -73,6 +85,12 @@ std::unordered_map<std::string, ReturnType> returnTypes({
  	std::make_pair<std::string, ReturnType>("hands_finger_size", ReturnType("size","")),
  	std::make_pair<std::string, ReturnType>("hands_finger_type", ReturnType("type","")),
  	std::make_pair<std::string, ReturnType>("hands_finger_is_extended", ReturnType("is_extended","")),
+
+ 	std::make_pair<std::string, ReturnType>("hands_arms_center", ReturnType("arm","center")),
+ 	std::make_pair<std::string, ReturnType>("hands_arms_direction", ReturnType("arm","direction")),
+ 	std::make_pair<std::string, ReturnType>("hands_arms_elbow_position", ReturnType("arm","elbow_position")),
+ 	std::make_pair<std::string, ReturnType>("hands_arms_wrist_position", ReturnType("arm","wrist_position")),
+ 	std::make_pair<std::string, ReturnType>("hands_arms_width", ReturnType("arm","width")),
 
  	std::make_pair<std::string, ReturnType>("tools_direction", ReturnType("direction", "")),
  	std::make_pair<std::string, ReturnType>("tools_position", ReturnType("position", "")),
@@ -121,3 +139,8 @@ inline std::vector<t_atom>makeAtoms(int handIndex, const std::string &name, floa
 	SETFLOAT(&vector[index+2], z);
 	return vector;
 }
+
+inline std::vector<t_atom>makeAtoms(int handIndex, const std::string &name, Leap::Vector &vec){
+	return makeAtoms(handIndex, name, vec.x, vec.y, vec.z);
+}
+

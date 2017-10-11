@@ -41,6 +41,7 @@ private:
     void out_interaction_box(const Frame &frame);
     void out_tools(const Frame &frame);
     void out_hands(const Frame &frame);
+    void out_arm(int handIndex, const Hand &hand);
     void out_fingers(int handIndex, const Hand &hand);
     void out_gesture_type(int gestureIndex, const Gesture &gesture);
     void out_gesture_state(int gestureIndex, const Gesture &gesture);

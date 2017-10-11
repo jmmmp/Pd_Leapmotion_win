@@ -32,6 +32,7 @@ inline void DeviceFacade::print(){
 	post("flipped: %s", boolToYesNo(device.isFlipped()).c_str());
 	post("streaming: %s", boolToYesNo(device.isStreaming()).c_str());
 	post("valid: %s", boolToYesNo(device.isValid()).c_str());
+
 	post("range: %f", device.range());
 	post("serial number: %s", device.serialNumber().c_str());
 	post("device type: %s", typeToString(device.type()).c_str());

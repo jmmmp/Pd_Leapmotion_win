@@ -54,6 +54,16 @@ inline void FlagHolder::print() {
 
 	post("is left:%s", flag_to_string("hands_is_left"));
 	post("is right:%s", flag_to_string("hands_is_right"));
+	post("grab strength:%s", flag_to_string("hands_grab_strength"));
+	post("pinch strength:%s", flag_to_string("hands_pinch_strength"));
+	post("time visble:%s", flag_to_string("hands_time_visible"));
+
+	post("-Arms-");
+	post("center:%s", flag_to_string("arms_center"));
+	post("direction:%s", flag_to_string("arms_direction"));
+	post("elbow position:%s", flag_to_string("arms_elbow_position"));
+	post("wrist position:%s", flag_to_string("arms_wrist_position"));
+	post("width:%s", flag_to_string("arms_width"));
 
 	post("-Tools-");
 	post("direction:%s", flag_to_string("tools_direction"));
