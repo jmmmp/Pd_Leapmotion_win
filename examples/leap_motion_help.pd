@@ -1,42 +1,42 @@
-#N canvas 546 162 1547 644 10;
+#N canvas 54 162 1547 772 10;
 #X obj 491 91 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
 -1;
-#X obj 491 31 tgl 30 0 empty empty empty 17 7 0 10 -262144 -1 -1 1
+#X obj 491 31 tgl 30 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;
 #X obj 491 71 metro 50;
 #X msg 535 93 info;
 #X obj 491 123 leapmotion;
 #N canvas 659 61 949 637 flags 0;
 #X obj 222 123 tgl 15 0 empty to_general general 17 7 0 10 -262144
--1 -1 1 1;
+-1 -1 0 1;
 #X obj 109 147 tgl 15 0 empty to_palm_position palm_position 17 7 0
-10 -262144 -1 -1 1 1;
+10 -262144 -1 -1 0 1;
 #X obj 110 378 tgl 15 0 empty to_fingers_position position 17 7 0 10
--262144 -1 -1 1 1;
+-262144 -1 -1 0 1;
 #X obj 227 336 tgl 15 0 empty to_tools_position position 17 7 0 10
--262144 -1 -1 1 1;
+-262144 -1 -1 0 1;
 #X obj 110 410 tgl 15 0 empty to_fingers_size size 17 7 0 10 -262144
--1 -1 1 1;
+-1 -1 0 1;
 #X obj 227 368 tgl 15 0 empty to_tools_size size 17 7 0 10 -262144
--1 -1 1 1;
+-1 -1 0 1;
 #X obj 227 352 tgl 15 0 empty to_tools_velocity velocity 17 7 0 10
--262144 -1 -1 1 1;
+-262144 -1 -1 0 1;
 #X obj 110 394 tgl 15 0 empty to_fingers_velocity velocity 17 7 0 10
--262144 -1 -1 1 1;
+-262144 -1 -1 0 1;
 #X obj 109 132 tgl 15 0 empty to_direction direction 17 7 0 10 -262144
--1 -1 1 1;
+-1 -1 0 1;
 #X obj 109 225 tgl 15 0 empty to_sphere_radius sphere_radius 17 7 0
-10 -262144 -1 -1 1 1;
+10 -262144 -1 -1 0 1;
 #X obj 109 240 tgl 15 0 empty to_sphere_center sphere_center 17 7 0
-10 -262144 -1 -1 1 1;
+10 -262144 -1 -1 0 1;
 #X obj 109 255 tgl 15 0 empty to_finger_count finger_count 17 7 0 10
--262144 -1 -1 1 1;
+-262144 -1 -1 0 1;
 #X obj 109 270 tgl 15 0 empty to_tool_count tool_count 17 7 0 10 -262144
--1 -1 1 1;
+-1 -1 0 1;
 #X obj 109 161 tgl 15 0 empty to_palm_velocity palm_velocity 17 7 0
-10 -262144 -1 -1 1 1;
+10 -262144 -1 -1 0 1;
 #X obj 109 176 tgl 15 0 empty to_palm_normal palm_normal 17 7 0 10
--262144 -1 -1 1 1;
+-262144 -1 -1 0 1;
 #X msg 381 73 general \$1;
 #X msg -75 114 hands_direction \$1;
 #X msg -73 208 hands_sphere_radius \$1;
@@ -59,38 +59,38 @@
 #X msg 374 464 TYPE_SCREEN_TAP \$1;
 #X msg 374 434 TYPE_SWIPE \$1;
 #X obj 227 399 tgl 15 0 empty to_gestures_circle circle 17 7 0 10 -262144
--1 -1 1 1;
+-1 -1 0 1;
 #X obj 227 429 tgl 15 0 empty to_gestures_key_tap key_tap 17 7 0 10
--262144 -1 -1 1 1;
+-262144 -1 -1 0 1;
 #X obj 227 444 tgl 15 0 empty to_gestures_screen_tap screen_tap 17
-7 0 10 -262144 -1 -1 1 1;
+7 0 10 -262144 -1 -1 0 1;
 #X obj 227 414 tgl 15 0 empty to_gestures_swipe swipe 17 7 0 10 -262144
--1 -1 1 1;
+-1 -1 0 1;
 #X obj 110 365 tgl 15 0 empty to_fingers_direction direction 17 7 0
-10 -262144 -1 -1 1 1;
+10 -262144 -1 -1 0 1;
 #X msg -73 395 fingers_direction \$1;
 #X text 108 117 hands;
 #X text 108 328 fingers;
 #X text 225 380 gestures;
 #X text 226 303 tools;
 #X obj 227 320 tgl 15 0 empty to_tools_direction direction 17 7 0 10
--262144 -1 -1 1 1;
+-262144 -1 -1 0 1;
 #X msg 373 324 tools_direction \$1;
 #X obj 221 104 tgl 15 0 empty empty all_on/off 17 7 0 10 -258113 -1
--1 1 1;
+-1 0 1;
 #X obj 214 522 list prepend flag;
 #X obj 235 588 outlet;
 #X obj 110 425 tgl 15 0 empty to_fingers_type type 17 7 0 10 -262144
--1 -1 1 1;
+-1 -1 0 1;
 #X msg -71 463 fingers_type \$1;
 #X obj 226 241 tgl 15 0 empty to_interaction_box_center center 17 7
-0 10 -262144 -1 -1 1 1;
+0 10 -262144 -1 -1 0 1;
 #X obj 226 257 tgl 15 0 empty to_interaction_box_width width 17 7 0
-10 -262144 -1 -1 1 1;
+10 -262144 -1 -1 0 1;
 #X obj 226 272 tgl 15 0 empty to_interaction_box_height height 17 7
-0 10 -262144 -1 -1 1 1;
+0 10 -262144 -1 -1 0 1;
 #X obj 226 286 tgl 15 0 empty to_interaction_box_depth depth 17 7 0
-10 -262144 -1 -1 1 1;
+10 -262144 -1 -1 0 1;
 #X msg 381 242 interaction_box_center \$1;
 #X msg 382 260 interaction_box_width \$1;
 #X msg 381 279 interaction_box_height \$1;
@@ -99,34 +99,34 @@
 #X msg -74 177 hands_is_left \$1;
 #X msg -73 193 hands_is_right \$1;
 #X obj 109 194 tgl 15 0 empty to_is_left is_left 17 7 0 10 -262144
--1 -1 1 1;
+-1 -1 0 1;
 #X obj 109 208 tgl 15 0 empty to_is_right is_right 17 7 0 10 -262144
--1 -1 1 1;
+-1 -1 0 1;
 #X obj 110 348 tgl 15 0 empty to_fingers_extended extended 17 7 0 10
--260097 -1 -1 1 1;
+-260097 -1 -1 0 1;
 #X msg -73 369 fingers_extended \$1;
 #X msg -72 485 fingers_is_extended \$1;
 #X obj 110 439 tgl 15 0 empty to_fingers_is_extended is_extended 17
-7 0 10 -262144 -1 -1 1 1;
+7 0 10 -262144 -1 -1 0 1;
 #X obj 109 285 tgl 15 0 empty to_grab_strength grab_strength 17 7 0
-10 -262144 -1 -1 1 1;
+10 -262144 -1 -1 0 1;
 #X obj 109 300 tgl 15 0 empty to_pinch_strength pinch_strength 17 7
-0 10 -262144 -1 -1 1 1;
+0 10 -262144 -1 -1 0 1;
 #X obj 109 314 tgl 15 0 empty to_time_visible time_visible 17 7 0 10
--262144 -1 -1 1 1;
+-262144 -1 -1 0 1;
 #X msg -72 268 hands_grab_strength \$1;
 #X msg -71 285 hands_pinch_strength \$1;
 #X msg -71 304 hands_time_visible \$1;
 #X obj 224 152 tgl 15 0 empty to_arms_center center 17 7 0 10 -262144
--1 -1 1 1;
+-1 -1 0 1;
 #X obj 224 168 tgl 15 0 empty to_arms_direction direction 17 7 0 10
--262144 -1 -1 1 1;
+-262144 -1 -1 0 1;
 #X obj 224 183 tgl 15 0 empty to_arms_elbow_position elbow_position
-17 7 0 10 -262144 -1 -1 1 1;
+17 7 0 10 -262144 -1 -1 0 1;
 #X obj 224 197 tgl 15 0 empty to_arms_wrist_position wrist_position
-17 7 0 10 -262144 -1 -1 1 1;
+17 7 0 10 -262144 -1 -1 0 1;
 #X obj 224 212 tgl 15 0 empty to_arms_width width 17 7 0 10 -262144
--1 -1 1 1;
+-1 -1 0 1;
 #X msg 367 124 arms_center \$1;
 #X msg 368 142 arms_direction \$1;
 #X msg 367 161 arms_elbow_position \$1;

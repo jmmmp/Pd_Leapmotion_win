@@ -2,7 +2,7 @@
 ## Leapmotion object
 A pure data external object for Leapmotion v.2
 
-![](img/patch.png)
+![](img/patch_new.png)
 
 - Commissioned by [João Pais](https://www.facebook.com/jmmmpais)
 - Developed by [Dr. Chikashi Miyama](http://chikashi.net)
