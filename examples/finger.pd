@@ -1,26 +1,26 @@
-#N canvas 279 129 538 468 10;
-#X floatatom 124 138 5 0 0 0 x - -, f 5;
-#X floatatom 124 155 5 0 0 0 y - -, f 5;
-#X floatatom 124 172 5 0 0 0 z - -, f 5;
-#X obj 174 135 unpack 0 0 0;
-#X floatatom 124 244 5 0 0 0 x - -, f 5;
-#X floatatom 124 260 5 0 0 0 y - -, f 5;
-#X floatatom 124 277 5 0 0 0 z - -, f 5;
-#X obj 174 244 unpack 0 0 0;
-#X floatatom 124 297 5 0 0 0 wdt - -, f 5;
-#X floatatom 124 313 5 0 0 0 len - -, f 5;
-#X obj 173 298 unpack 0 0;
-#X floatatom 124 191 5 0 0 0 x - -, f 5;
-#X floatatom 124 207 5 0 0 0 y - -, f 5;
-#X floatatom 124 224 5 0 0 0 z - -, f 5;
-#X obj 174 191 unpack 0 0 0;
-#X obj 174 52 inlet;
-#X obj 174 77 route \$1;
-#X symbolatom 110 121 7 0 0 0 - - -, f 7;
-#X obj 393 239 symbol;
-#X obj 144 331 tgl 15 0 empty empty extend -37 7 0 10 -262144 -1 -1
+#N canvas 279 129 432 311 10;
+#X floatatom 34 98 5 0 0 0 x - -;
+#X floatatom 34 114 5 0 0 0 y - -;
+#X floatatom 34 130 5 0 0 0 z - -;
+#X obj 84 95 unpack 0 0 0;
+#X floatatom 34 200 5 0 0 0 x - -;
+#X floatatom 34 216 5 0 0 0 y - -;
+#X floatatom 34 232 5 0 0 0 z - -;
+#X obj 84 203 unpack 0 0 0;
+#X floatatom 34 251 5 0 0 0 wdt - -;
+#X floatatom 34 267 5 0 0 0 len - -;
+#X obj 83 257 unpack 0 0;
+#X floatatom 34 149 5 0 0 0 x - -;
+#X floatatom 34 165 5 0 0 0 y - -;
+#X floatatom 34 181 5 0 0 0 z - -;
+#X obj 84 151 unpack 0 0 0;
+#X obj 84 12 inlet;
+#X obj 84 37 route \$1;
+#X symbolatom 16 79 8 0 0 0 - - -;
+#X obj 302 86 symbol;
+#X obj 51 286 tgl 15 0 empty empty extend -37 7 0 10 -262144 -1 -1
 0 1;
-#X obj 174 103 route direction position velocity size type is_extended
+#X obj 84 63 route direction position velocity size type is_extended
 ;
 #X connect 3 0 0 0;
 #X connect 3 1 1 0;
@@ -42,4 +42,4 @@
 #X connect 20 3 10 0;
 #X connect 20 4 18 0;
 #X connect 20 5 19 0;
-#X coords 0 -1 1 1 65 250 1 100 100;
+#X coords 0 -1 1 1 60 245 1 10 60;
