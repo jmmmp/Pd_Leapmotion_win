@@ -9,7 +9,7 @@ A pure data external object for Leapmotion v.2
 - Thanks to: [Dan Wilcox](https://github.com/danomatika) and [Jakub Valtar](https://github.com/JakubValtar)
 
 ## how to use
-In the examples folder you can find the help patch, as well as the files leapmotion.dll and leap.dll. Always place both dlls in Pure Data's path, or in the same folder as your patch to instantiate the leapmotion object and the communication to the leap sensor.
+In the examples folder you can find the help patch, as well as the files leapmotion.dll and leap.dll. Always place both dlls in Pure Data's path, or in the same folder as your patch, to instantiate the leapmotion object and the communication to the leap sensor.
 
 ## how to build
 ### prerequisite
