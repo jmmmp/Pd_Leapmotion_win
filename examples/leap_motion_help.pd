@@ -4,147 +4,158 @@
 #X obj 41 33 tgl 30 0 empty empty empty 17 7 0 10 -4034 -1 -1 0 1;
 #X obj 41 73 metro 50;
 #X msg 61 93 info;
-#N canvas 396 22 905 553 flags 0;
-#X obj 324 63 tgl 15 0 empty to_general general 17 7 0 10 -262144 -1
--1 1 1;
-#X obj 199 87 tgl 15 0 empty to_palm_position palm_position 17 7 0
-10 -262144 -1 -1 1 1;
-#X obj 199 325 tgl 15 0 empty to_fingers_position position 17 7 0 10
--262144 -1 -1 1 1;
-#X obj 327 276 tgl 15 0 empty to_tools_position position 17 7 0 10
--262144 -1 -1 1 1;
-#X obj 199 355 tgl 15 0 empty to_fingers_size size 17 7 0 10 -262144
--1 -1 1 1;
-#X obj 327 306 tgl 15 0 empty to_tools_size size 17 7 0 10 -262144
--1 -1 1 1;
-#X obj 327 291 tgl 15 0 empty to_tools_velocity velocity 17 7 0 10
--262144 -1 -1 1 1;
-#X obj 199 340 tgl 15 0 empty to_fingers_velocity velocity 17 7 0 10
--262144 -1 -1 1 1;
-#X obj 199 72 tgl 15 0 empty to_direction direction 17 7 0 10 -262144
--1 -1 1 1;
-#X obj 199 167 tgl 15 0 empty to_sphere_radius sphere_radius 17 7 0
-10 -262144 -1 -1 1 1;
-#X obj 199 182 tgl 15 0 empty to_sphere_center sphere_center 17 7 0
-10 -262144 -1 -1 1 1;
-#X obj 199 197 tgl 15 0 empty to_finger_count finger_count 17 7 0 10
--262144 -1 -1 1 1;
-#X obj 199 212 tgl 15 0 empty to_tool_count tool_count 17 7 0 10 -262144
--1 -1 1 1;
-#X obj 199 101 tgl 15 0 empty to_palm_velocity palm_velocity 17 7 0
-10 -262144 -1 -1 1 1;
-#X obj 199 116 tgl 15 0 empty to_palm_normal palm_normal 17 7 0 10
--262144 -1 -1 1 1;
-#X msg 471 13 general \$1;
-#X msg 15 54 hands_direction \$1;
-#X msg 17 148 hands_sphere_radius \$1;
-#X msg 17 163 hands_sphere_center \$1;
-#X msg 17 178 hands_finger_count \$1;
-#X msg 17 192 hands_tool_count \$1;
-#X msg 15 69 hands_palm_position \$1;
-#X msg 16 83 hands_palm_velocity \$1;
-#X msg 16 103 hands_palm_normal \$1;
-#X msg 17 384 fingers_size \$1;
-#X obj 464 431 list prepend gestures;
-#X obj 304 501 list trim;
-#X msg 464 311 tools_size \$1;
-#X msg 17 352 fingers_position \$1;
-#X msg 17 370 fingers_velocity \$1;
-#X msg 464 280 tools_position \$1;
-#X msg 464 295 tools_velocity \$1;
-#X msg 464 358 TYPE_CIRCLE \$1;
-#X msg 464 389 TYPE_KEY_TAP \$1;
-#X msg 464 404 TYPE_SCREEN_TAP \$1;
-#X msg 464 374 TYPE_SWIPE \$1;
-#X obj 327 340 tgl 15 0 empty to_gestures_circle circle 17 7 0 10 -262144
--1 -1 1 1;
-#X obj 327 370 tgl 15 0 empty to_gestures_key_tap key_tap 17 7 0 10
--262144 -1 -1 1 1;
-#X obj 327 385 tgl 15 0 empty to_gestures_screen_tap screen_tap 17
-7 0 10 -262144 -1 -1 1 1;
-#X obj 327 355 tgl 15 0 empty to_gestures_swipe swipe 17 7 0 10 -262144
--1 -1 1 1;
-#X obj 199 310 tgl 15 0 empty to_fingers_direction direction 17 7 0
-10 -262144 -1 -1 1 1;
-#X msg 17 335 fingers_direction \$1;
-#X text 198 57 hands;
-#X text 197 272 fingers;
-#X text 325 321 gestures;
-#X text 326 244 tools;
-#X obj 327 261 tgl 15 0 empty to_tools_direction direction 17 7 0 10
--262144 -1 -1 1 1;
-#X msg 463 264 tools_direction \$1;
-#X obj 324 44 tgl 15 0 empty empty all_on/off 17 7 0 10 -258113 -1
--1 1 1;
-#X obj 199 370 tgl 15 0 empty to_fingers_type type 17 7 0 10 -262144
--1 -1 1 1;
-#X msg 19 403 fingers_type \$1;
-#X obj 326 183 tgl 15 0 empty to_interaction_box_center center 17 7
-0 10 -262144 -1 -1 1 1;
-#X obj 326 198 tgl 15 0 empty to_interaction_box_width width 17 7 0
-10 -262144 -1 -1 1 1;
-#X obj 326 213 tgl 15 0 empty to_interaction_box_height height 17 7
-0 10 -262144 -1 -1 1 1;
-#X obj 326 228 tgl 15 0 empty to_interaction_box_depth depth 17 7 0
-10 -262144 -1 -1 1 1;
-#X msg 471 182 interaction_box_center \$1;
-#X msg 472 200 interaction_box_width \$1;
-#X msg 471 219 interaction_box_height \$1;
-#X msg 470 237 interaction_box_depth \$1;
-#X text 322 166 interaction box;
-#X msg 16 117 hands_is_left \$1;
-#X msg 17 133 hands_is_right \$1;
-#X obj 199 134 tgl 15 0 empty to_is_left is_left 17 7 0 10 -262144
--1 -1 1 1;
-#X obj 199 149 tgl 15 0 empty to_is_right is_right 17 7 0 10 -262144
--1 -1 1 1;
-#X obj 199 292 tgl 15 0 empty to_fingers_extended extended 17 7 0 10
--260097 -1 -1 1 1;
-#X msg 17 309 fingers_extended \$1;
-#X msg 18 425 fingers_is_extended \$1;
-#X obj 199 385 tgl 15 0 empty to_fingers_is_extended is_extended 17
-7 0 10 -262144 -1 -1 1 1;
-#X obj 199 227 tgl 15 0 empty to_grab_strength grab_strength 17 7 0
-10 -262144 -1 -1 1 1;
-#X obj 199 242 tgl 15 0 empty to_pinch_strength pinch_strength 17 7
-0 10 -262144 -1 -1 1 1;
-#X obj 199 257 tgl 15 0 empty to_time_visible time_visible 17 7 0 10
--262144 -1 -1 1 1;
-#X msg 18 208 hands_grab_strength \$1;
-#X msg 19 225 hands_pinch_strength \$1;
-#X msg 19 244 hands_time_visible \$1;
-#X obj 324 92 tgl 15 0 empty to_arms_center center 17 7 0 10 -262144
--1 -1 1 1;
-#X obj 324 107 tgl 15 0 empty to_arms_direction direction 17 7 0 10
--262144 -1 -1 1 1;
-#X obj 324 122 tgl 15 0 empty to_arms_elbow_position elbow_position
-17 7 0 10 -262144 -1 -1 1 1;
-#X obj 324 137 tgl 15 0 empty to_arms_wrist_position wrist_position
-17 7 0 10 -262144 -1 -1 1 1;
-#X obj 324 152 tgl 15 0 empty to_arms_width width 17 7 0 10 -262144
--1 -1 1 1;
-#X msg 457 64 arms_center \$1;
-#X msg 458 82 arms_direction \$1;
-#X msg 457 101 arms_elbow_position \$1;
-#X msg 456 119 arms_wrist_position \$1;
-#X msg 456 138 arms_width \$1;
-#X text 322 76 arms;
-#X msg 682 14 \; to_general \$1 \; to_direction \$1 \; to_palm_position
-\$1 \; to_palm_velocity \$1 \; to_palm_normal \$1 \; to_is_left \$1
-\; to_is_right \$1 \; to_sphere_radius \$1 \; to_sphere_center \$1
-\; to_finger_count \$1 \; to_tool_count \$1 \; to_grab_strength \$1
-\; to_pinch_strength \$1 \; to_time_visible \$1 \; to_arms_center \$1
-\; to_arms_direction \$1 \; to_arms_elbow_position \$1 \; to_arms_wrist_position
-\$1 \; to_arms_width \$1 \; to_fingers_extended \$1 \; to_fingers_direction
-\$1 \; to_fingers_position \$1 \; to_fingers_velocity \$1 \; to_fingers_size
-\$1 \; to_fingers_type \$1 \; to_fingers_is_extended \$1 \; to_tools_direction
-\$1 \; to_tools_position \$1 \; to_tools_velocity \$1 \; to_tools_size
-\$1 \; to_gestures_circle \$1 \; to_gestures_swipe \$1 \; to_gestures_key_tap
-\$1 \; to_gestures_screen_tap \$1 \; to_interaction_box_center \$1
-\; to_interaction_box_width \$1 \; to_interaction_box_height \$1 \;
-to_interaction_box_depth \$1 \;;
-#X obj 304 521 s flags;
-#X obj 304 462 list prepend flag;
+#N canvas 396 22 841 559 flags 0;
+#X obj 324 61 tgl 15 0 empty to_general general 17 7 0 10 -228856 -1
+-1 0 1;
+#X obj 199 91 tgl 15 0 empty to_palm_position palm_position 17 7 0
+10 -262144 -1 -1 0 1;
+#X obj 199 326 tgl 15 0 empty to_fingers_position position 17 7 0 10
+-262144 -1 -1 0 1;
+#X obj 324 280 tgl 15 0 empty to_tools_position position 17 7 0 10
+-262144 -1 -1 0 1;
+#X obj 199 356 tgl 15 0 empty to_fingers_size size 17 7 0 10 -262144
+-1 -1 0 1;
+#X obj 324 310 tgl 15 0 empty to_tools_size size 17 7 0 10 -262144
+-1 -1 0 1;
+#X obj 324 295 tgl 15 0 empty to_tools_velocity velocity 17 7 0 10
+-262144 -1 -1 0 1;
+#X obj 199 341 tgl 15 0 empty to_fingers_velocity velocity 17 7 0 10
+-262144 -1 -1 0 1;
+#X obj 199 76 tgl 15 0 empty to_direction direction 17 7 0 10 -262144
+-1 -1 0 1;
+#X obj 199 165 tgl 15 0 empty to_sphere_radius sphere_radius 17 7 0
+10 -262144 -1 -1 0 1;
+#X obj 199 180 tgl 15 0 empty to_sphere_center sphere_center 17 7 0
+10 -262144 -1 -1 0 1;
+#X obj 199 195 tgl 15 0 empty to_finger_count finger_count 17 7 0 10
+-262144 -1 -1 0 1;
+#X obj 199 210 tgl 15 0 empty to_tool_count tool_count 17 7 0 10 -262144
+-1 -1 0 1;
+#X obj 199 105 tgl 15 0 empty to_palm_velocity palm_velocity 17 7 0
+10 -262144 -1 -1 0 1;
+#X obj 199 120 tgl 15 0 empty to_palm_normal palm_normal 17 7 0 10
+-262144 -1 -1 0 1;
+#X msg 471 11 general \$1;
+#X msg 15 22 hands_direction \$1;
+#X msg 17 116 hands_sphere_radius \$1;
+#X msg 17 131 hands_sphere_center \$1;
+#X msg 17 146 hands_finger_count \$1;
+#X msg 17 160 hands_tool_count \$1;
+#X msg 15 37 hands_palm_position \$1;
+#X msg 16 51 hands_palm_velocity \$1;
+#X msg 16 71 hands_palm_normal \$1;
+#X msg 200 488 fingers_size \$1;
+#X obj 464 429 list prepend gestures;
+#X obj 354 499 list trim;
+#X msg 464 309 tools_size \$1;
+#X msg 200 456 fingers_position \$1;
+#X msg 200 474 fingers_velocity \$1;
+#X msg 464 278 tools_position \$1;
+#X msg 464 293 tools_velocity \$1;
+#X msg 464 356 TYPE_CIRCLE \$1;
+#X msg 464 387 TYPE_KEY_TAP \$1;
+#X msg 464 402 TYPE_SCREEN_TAP \$1;
+#X msg 464 372 TYPE_SWIPE \$1;
+#X obj 324 343 tgl 15 0 empty to_gestures_circle circle 17 7 0 10 -262144
+-1 -1 0 1;
+#X obj 324 373 tgl 15 0 empty to_gestures_key_tap key_tap 17 7 0 10
+-262144 -1 -1 0 1;
+#X obj 324 388 tgl 15 0 empty to_gestures_screen_tap screen_tap 17
+7 0 10 -262144 -1 -1 0 1;
+#X obj 324 358 tgl 15 0 empty to_gestures_swipe swipe 17 7 0 10 -262144
+-1 -1 0 1;
+#X obj 199 311 tgl 15 0 empty to_fingers_direction direction 17 7 0
+10 -262144 -1 -1 0 1;
+#X msg 200 439 fingers_direction \$1;
+#X obj 324 265 tgl 15 0 empty to_tools_direction direction 17 7 0 10
+-262144 -1 -1 0 1;
+#X msg 463 262 tools_direction \$1;
+#X obj 324 42 tgl 15 0 empty empty all_on/off 17 7 0 10 -258113 -1
+-1 0 1;
+#X obj 199 371 tgl 15 0 empty to_fingers_type type 17 7 0 10 -262144
+-1 -1 0 1;
+#X msg 202 507 fingers_type \$1;
+#X obj 324 187 tgl 15 0 empty to_interaction_box_center center 17 7
+0 10 -262144 -1 -1 0 1;
+#X obj 324 202 tgl 15 0 empty to_interaction_box_width width 17 7 0
+10 -262144 -1 -1 0 1;
+#X obj 324 217 tgl 15 0 empty to_interaction_box_height height 17 7
+0 10 -262144 -1 -1 0 1;
+#X obj 324 232 tgl 15 0 empty to_interaction_box_depth depth 17 7 0
+10 -262144 -1 -1 0 1;
+#X msg 471 180 interaction_box_center \$1;
+#X msg 472 198 interaction_box_width \$1;
+#X msg 471 217 interaction_box_height \$1;
+#X msg 470 235 interaction_box_depth \$1;
+#X msg 16 85 hands_is_left \$1;
+#X msg 17 101 hands_is_right \$1;
+#X obj 199 135 tgl 15 0 empty to_is_left is_left 17 7 0 10 -262144
+-1 -1 0 1;
+#X obj 199 150 tgl 15 0 empty to_is_right is_right 17 7 0 10 -262144
+-1 -1 0 1;
+#X obj 199 296 tgl 15 0 empty to_fingers_extended extended 17 7 0 10
+-262144 -1 -1 0 1;
+#X msg 200 423 fingers_extended \$1;
+#X msg 201 529 fingers_is_extended \$1;
+#X obj 199 386 tgl 15 0 empty to_fingers_is_extended is_extended 17
+7 0 10 -262144 -1 -1 0 1;
+#X obj 199 225 tgl 15 0 empty to_grab_strength grab_strength 17 7 0
+10 -262144 -1 -1 0 1;
+#X obj 199 240 tgl 15 0 empty to_pinch_strength pinch_strength 17 7
+0 10 -262144 -1 -1 0 1;
+#X obj 199 255 tgl 15 0 empty to_time_visible time_visible 17 7 0 10
+-262144 -1 -1 0 1;
+#X msg 18 176 hands_grab_strength \$1;
+#X msg 19 193 hands_pinch_strength \$1;
+#X msg 19 212 hands_time_visible \$1;
+#X obj 324 94 tgl 15 0 empty to_arms_center center 17 7 0 10 -262144
+-1 -1 0 1;
+#X obj 324 109 tgl 15 0 empty to_arms_direction direction 17 7 0 10
+-262144 -1 -1 0 1;
+#X obj 324 124 tgl 15 0 empty to_arms_elbow_position elbow_position
+17 7 0 10 -262144 -1 -1 0 1;
+#X obj 324 139 tgl 15 0 empty to_arms_wrist_position wrist_position
+17 7 0 10 -262144 -1 -1 0 1;
+#X obj 324 154 tgl 15 0 empty to_arms_width width 17 7 0 10 -262144
+-1 -1 0 1;
+#X msg 457 62 arms_center \$1;
+#X msg 458 80 arms_direction \$1;
+#X msg 457 99 arms_elbow_position \$1;
+#X msg 456 117 arms_wrist_position \$1;
+#X msg 456 136 arms_width \$1;
+#X obj 354 519 s flags;
+#X obj 354 460 list prepend flag;
+#X obj 199 61 tgl 15 0 empty to_hands Hands 17 7 0 10 -228856 -1 -1
+0 1;
+#X obj 199 281 tgl 15 0 empty to_fingers Fingers 17 7 0 10 -228856
+-1 -1 0 1;
+#X obj 324 250 tgl 15 0 empty to_tools Tools 17 7 0 10 -228856 -1 -1
+0 1;
+#X msg 643 307 \; to_tools_direction \$1 \; to_tools_position \$1 \;
+to_tools_velocity \$1 \; to_tools_size \$1;
+#X obj 324 328 tgl 15 0 empty to_gestures Gestures 17 7 0 10 -228856
+-1 -1 0 1;
+#X msg 643 386 \; to_gestures_circle \$1 \; to_gestures_swipe \$1 \;
+to_gestures_key_tap \$1 \; to_gestures_screen_tap \$1 \;;
+#X msg 19 237 \; to_direction \$1 \; to_palm_position \$1 \; to_palm_velocity
+\$1 \; to_palm_normal \$1 \; to_sphere_radius \$1 \; to_sphere_center
+\$1 \; to_finger_count \$1 \; to_tool_count \$1 \; to_is_left \$1 \;
+to_is_right \$1 \; to_grab_strength \$1 \; to_pinch_strength \$1 \;
+to_time_visible \$1;
+#X msg 20 433 \; to_fingers_direction \$1 \; to_fingers_position \$1
+\; to_fingers_velocity \$1 \; to_fingers_size \$1 \; to_fingers_type
+\$1 \; to_fingers_is_extended \$1 \; to_fingers_extended \$1;
+#X msg 642 230 \; to_interaction_box_center \$1 \; to_interaction_box_width
+\$1 \; to_interaction_box_height \$1 \; to_interaction_box_depth \$1
+\;;
+#X obj 324 172 tgl 15 0 empty to_interaction.box Interaction.box 17
+7 0 10 -228856 -1 -1 0 1;
+#X obj 324 79 tgl 15 0 empty to_arms Arms 17 7 0 10 -228856 -1 -1 0
+1;
+#X msg 642 132 \; to_arms_center \$1 \; to_arms_direction \$1 \; to_arms_elbow_position
+\$1 \; to_arms_wrist_position \$1 \; to_arms_width \$1;
+#X msg 640 17 \; to_hands \$1 \; to_arms \$1 \; to_fingers \$1 \; to_interaction.box
+\$1 \; to_tools \$1 \; to_gestures \$1 \; to_general \$1;
 #X connect 0 0 15 0;
 #X connect 1 0 21 0;
 #X connect 2 0 28 0;
@@ -160,23 +171,23 @@ to_interaction_box_depth \$1 \;;
 #X connect 12 0 20 0;
 #X connect 13 0 22 0;
 #X connect 14 0 23 0;
-#X connect 15 0 87 0;
-#X connect 16 0 87 0;
-#X connect 17 0 87 0;
-#X connect 18 0 87 0;
-#X connect 19 0 87 0;
-#X connect 20 0 87 0;
-#X connect 21 0 87 0;
-#X connect 22 0 87 0;
-#X connect 23 0 87 0;
-#X connect 24 0 87 0;
+#X connect 15 0 80 0;
+#X connect 16 0 80 0;
+#X connect 17 0 80 0;
+#X connect 18 0 80 0;
+#X connect 19 0 80 0;
+#X connect 20 0 80 0;
+#X connect 21 0 80 0;
+#X connect 22 0 80 0;
+#X connect 23 0 80 0;
+#X connect 24 0 80 0;
 #X connect 25 0 26 0;
-#X connect 26 0 86 0;
-#X connect 27 0 87 0;
-#X connect 28 0 87 0;
-#X connect 29 0 87 0;
-#X connect 30 0 87 0;
-#X connect 31 0 87 0;
+#X connect 26 0 79 0;
+#X connect 27 0 80 0;
+#X connect 28 0 80 0;
+#X connect 29 0 80 0;
+#X connect 30 0 80 0;
+#X connect 31 0 80 0;
 #X connect 32 0 25 0;
 #X connect 33 0 25 0;
 #X connect 34 0 25 0;
@@ -186,45 +197,51 @@ to_interaction_box_depth \$1 \;;
 #X connect 38 0 34 0;
 #X connect 39 0 35 0;
 #X connect 40 0 41 0;
-#X connect 41 0 87 0;
-#X connect 46 0 47 0;
-#X connect 47 0 87 0;
-#X connect 48 0 85 0;
-#X connect 49 0 50 0;
-#X connect 50 0 87 0;
-#X connect 51 0 55 0;
-#X connect 52 0 56 0;
-#X connect 53 0 57 0;
-#X connect 54 0 58 0;
-#X connect 55 0 87 0;
-#X connect 56 0 87 0;
-#X connect 57 0 87 0;
-#X connect 58 0 87 0;
-#X connect 60 0 87 0;
-#X connect 61 0 87 0;
-#X connect 62 0 60 0;
-#X connect 63 0 61 0;
-#X connect 64 0 65 0;
-#X connect 65 0 87 0;
-#X connect 66 0 87 0;
-#X connect 67 0 66 0;
-#X connect 68 0 71 0;
-#X connect 69 0 72 0;
-#X connect 70 0 73 0;
-#X connect 71 0 87 0;
-#X connect 72 0 87 0;
-#X connect 73 0 87 0;
-#X connect 74 0 79 0;
+#X connect 41 0 80 0;
+#X connect 42 0 43 0;
+#X connect 43 0 80 0;
+#X connect 44 0 93 0;
+#X connect 45 0 46 0;
+#X connect 46 0 80 0;
+#X connect 47 0 51 0;
+#X connect 48 0 52 0;
+#X connect 49 0 53 0;
+#X connect 50 0 54 0;
+#X connect 51 0 80 0;
+#X connect 52 0 80 0;
+#X connect 53 0 80 0;
+#X connect 54 0 80 0;
+#X connect 55 0 80 0;
+#X connect 56 0 80 0;
+#X connect 57 0 55 0;
+#X connect 58 0 56 0;
+#X connect 59 0 60 0;
+#X connect 60 0 80 0;
+#X connect 61 0 80 0;
+#X connect 62 0 61 0;
+#X connect 63 0 66 0;
+#X connect 64 0 67 0;
+#X connect 65 0 68 0;
+#X connect 66 0 80 0;
+#X connect 67 0 80 0;
+#X connect 68 0 80 0;
+#X connect 69 0 74 0;
+#X connect 70 0 75 0;
+#X connect 71 0 76 0;
+#X connect 72 0 77 0;
+#X connect 73 0 78 0;
+#X connect 74 0 80 0;
 #X connect 75 0 80 0;
-#X connect 76 0 81 0;
-#X connect 77 0 82 0;
-#X connect 78 0 83 0;
-#X connect 79 0 87 0;
-#X connect 80 0 87 0;
+#X connect 76 0 80 0;
+#X connect 77 0 80 0;
+#X connect 78 0 80 0;
+#X connect 80 0 26 0;
 #X connect 81 0 87 0;
-#X connect 82 0 87 0;
-#X connect 83 0 87 0;
-#X connect 87 0 26 0;
+#X connect 82 0 88 0;
+#X connect 83 0 84 0;
+#X connect 85 0 86 0;
+#X connect 90 0 89 0;
+#X connect 91 0 92 0;
 #X coords 0 -1 1 1 250 365 1 190 40;
 #X restore 280 9 pd flags;
 #X obj 98 173 s gesture;
@@ -347,8 +364,8 @@ to_interaction_box_depth \$1 \;;
 #X connect 7 2 4 0;
 #X coords 0 -1 1 1 120 130 1 100 100;
 #X restore 543 244 pd interaction_box;
-#X obj 71 123 r flags;
-#X obj 131 123 r configs;
+#X obj 61 123 r flags;
+#X obj 121 123 r configs;
 #X obj 13 384 hand 0;
 #X obj 986 242 gesture 2;
 #X obj 697 384 hand 1;
