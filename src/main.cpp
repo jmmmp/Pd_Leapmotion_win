@@ -45,9 +45,9 @@ void leapmotion::m_bang(){
     int num_gestures = frame.gestures().count();
 
     out_general(frame);
-    out_interaction_box(frame);
-    out_tools(frame);
     out_hands(frame);
+    out_tools(frame);
+    out_interaction_box(frame);
 
     // hands and fingers
     t_atom gestureCountInfo[1];            
@@ -183,6 +183,14 @@ void leapmotion::out_hands(const Frame &frame){
         Hand hand = frame.hands()[i];
         int num_tools = hand.tools().count();
 
+        if(flagHolder.get("hands_is_left")){
+            auto atoms = makeAtoms(i, "hands_is_left", hand.isLeft());
+            ToOutAnything(OUTLET_DATA, gensym("hand"), atoms.size(), &atoms[0]);
+        }
+        if(flagHolder.get("hands_is_right")){
+            auto atoms = makeAtoms(i, "hands_is_right", hand.isRight());
+            ToOutAnything(OUTLET_DATA, gensym("hand"), atoms.size(), &atoms[0]);
+        }
         if(flagHolder.get("hands_direction")){
             auto atoms = makeAtoms(i, "hands_direction", hand.direction().x, hand.direction().y, hand.direction().z);
             ToOutAnything(OUTLET_DATA, gensym("hand"), atoms.size(), &atoms[0]);
@@ -205,14 +213,6 @@ void leapmotion::out_hands(const Frame &frame){
         }
         if(flagHolder.get("hands_sphere_center")){
             auto atoms = makeAtoms(i, "hands_sphere_center", hand.sphereCenter().x, hand.sphereCenter().y, hand.sphereCenter().z);
-            ToOutAnything(OUTLET_DATA, gensym("hand"), atoms.size(), &atoms[0]);
-        }
-        if(flagHolder.get("hands_is_left")){
-            auto atoms = makeAtoms(i, "hands_is_left", hand.isLeft());
-            ToOutAnything(OUTLET_DATA, gensym("hand"), atoms.size(), &atoms[0]);
-        }
-        if(flagHolder.get("hands_is_right")){
-            auto atoms = makeAtoms(i, "hands_is_right", hand.isRight());
             ToOutAnything(OUTLET_DATA, gensym("hand"), atoms.size(), &atoms[0]);
         }
         if(flagHolder.get("hands_grab_strength")){
