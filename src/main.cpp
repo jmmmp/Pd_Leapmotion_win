@@ -275,6 +275,10 @@ void leapmotion::out_fingers(int handIndex, const Hand &hand){
 
     for(int fingerIndex = 0; fingerIndex < fingerList.count(); fingerIndex++){
 
+        if(flagHolder.get("fingers_type")){
+            auto atoms = fingers.getAtoms(handIndex, fingerIndex, "hands_finger_type");
+            ToOutAnything(OUTLET_DATA, gensym("hand"), atoms.size(), &atoms[0]);
+        }
         if(flagHolder.get("fingers_direction")){
             auto atoms = fingers.getAtoms(handIndex, fingerIndex, "hands_finger_direction");
             ToOutAnything(OUTLET_DATA, gensym("hand"), atoms.size(), &atoms[0]);
@@ -289,10 +293,6 @@ void leapmotion::out_fingers(int handIndex, const Hand &hand){
         }
         if(flagHolder.get("fingers_size")){
             auto atoms = fingers.getAtoms(handIndex, fingerIndex, "hands_finger_size");
-            ToOutAnything(OUTLET_DATA, gensym("hand"), atoms.size(), &atoms[0]);
-        }
-        if(flagHolder.get("fingers_type")){
-            auto atoms = fingers.getAtoms(handIndex, fingerIndex, "hands_finger_type");
             ToOutAnything(OUTLET_DATA, gensym("hand"), atoms.size(), &atoms[0]);
         }
         if(flagHolder.get("fingers_is_extended")){
